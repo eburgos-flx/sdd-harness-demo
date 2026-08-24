@@ -1,15 +1,16 @@
 services:
   postgres:
     image: postgres:16-alpine
+    container_name: flexi-kudos-postgres
     ports:
-      - 5432:5432
+      - '5432:5432'
     restart: unless-stopped
     environment:
-      POSTGRES_USER: "${DB_USER:-admin}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD:-admin}"
-      POSTGRES_DB: "${DB_NAME:-app_dev}"
+      POSTGRES_USER: '${DB_USER:-kudos}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-kudos}'
+      POSTGRES_DB: '${DB_NAME:-kudos}'
     healthcheck:
-      test: "pg_isready -U $$POSTGRES_USER"
+      test: 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB'
       interval: 5s
       timeout: 3s
       retries: 5

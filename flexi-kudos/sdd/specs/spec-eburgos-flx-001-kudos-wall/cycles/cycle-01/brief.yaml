@@ -1,0 +1,152 @@
+# sdd/specs/spec-eburgos-flx-001-kudos-wall/cycles/cycle-01/brief.yaml
+# Generado por: sdd-orchestrator
+# Al: iniciar cycle-01
+
+cycle: 1
+module: kudos-wall
+phase: core-e2e
+date: 2026-08-24
+spec: spec-eburgos-flx-001-kudos-wall
+apps:
+  - apps/api
+  - apps/webapp
+  - libs/shared-types
+
+app_context:
+  api: sdd/context/apps/api/context_prompt.md
+  webapp: sdd/context/apps/webapp/context_prompt.md
+  shared_types: sdd/context/libs/shared-types/context_prompt.md
+
+objective: |
+  Entregar el núcleo end-to-end del muro de kudos: API REST NestJS + Postgres + DTOs
+  compartidos + vista de muro y formulario de alta en React, cubriendo RF-1 a RF-6 y
+  todos los RNF de la spec, con el happy path (CA-001) verde al cierre.
+
+scope:
+  - Endpoint POST /v1/kudos con validación de negocio (S-3, S-4), rate limit 60 req/min por IP (RNF-4) y respuesta 201 con DTO expandido
+  - Endpoint GET /v1/kudos con paginación por cursor sobre (created_at desc, id desc), defaults limit=20 y cap 50
+  - Endpoint GET /v1/members (lista fija seedeada, orden alfabético) y GET /v1/categories (enum fijo con label presentable)
+  - Endpoint GET /healthz (RNF-6)
+  - Migración/es de Postgres para tablas members y kudos (mecanismo lo decide el architect entre TypeORM/Prisma según constitución de apps/api)
+  - Seed de miembros del equipo (mínimo 6) y opcional seed de kudos para CA-010
+  - DTOs en libs/shared-types (MemberDto, CategoryDto, KudoDto, CreateKudoRequest, KudoListResponse) publicados y consumidos por API y webapp
+  - Ruta / del webapp con grilla responsive de tarjetas, estado vacío y botón "Cargar más"
+  - Ruta /nuevo (o modal) del webapp con formulario controlado, validación cliente y feedback de errores
+  - Formato de error uniforme { error:{code, message, details?}} con los códigos de RNF-5
+  - Logs estructurados JSON con request_id (RNF-6)
+  - Tests unitarios de servicios de validación + e2e supertest (happy path + 3 errores clave) en apps/api
+  - Tests de render del muro y validación del formulario en apps/webapp
+  - docker-compose de Postgres levantado en la raíz del monorepo (si no existe, agregarlo)
+
+out_of_scope:
+  - Autenticación / login / SSO
+  - Roles (admin, moderador)
+  - Edición o borrado de kudos
+  - Reacciones o comentarios
+  - Notificaciones (mail, Slack)
+  - Multi-equipo / multi-tenant
+  - Real-time / websockets
+  - Métricas agregadas (rankings)
+  - Scroll infinito automático (v1 usa "Cargar más")
+  - i18n (solo español rioplatense)
+
+dependencies_required: []
+
+agent_contexts:
+  functional:
+    goal: >
+      Convertir RF-1..RF-6 y las reglas S-1..S-9 en historias de usuario accionables
+      (HU-01..HU-NN) con criterios de aceptación verificables. Trazar cada HU con al
+      menos un CA-XXX de la spec.
+    business_context: |
+      Muro público de reconocimientos entre pares de un equipo interno de Flexibility.
+      Sin auth: giver/receiver se eligen de una lista fija seedeada. Categorías cerradas
+      (teamwork, ownership, innovation, delivery, kindness, learning). Kudo inmutable
+      una vez creado. Feed ordenado por fecha desc con paginación por cursor.
+    relevant_spec_sections:
+      - "Resumen Ejecutivo"
+      - "Contexto de Negocio"
+      - "Alcance y supuestos (S-1..S-9)"
+      - "Requisitos Funcionales (RF-1..RF-6)"
+      - "Criterios de Aceptación (CA-001..CA-015)"
+      - "Casos borde"
+    output_file: sdd/specs/spec-eburgos-flx-001-kudos-wall/cycles/cycle-01/functional.md
+
+  planner:
+    goal: >
+      Descomponer functional.md en tasks técnicas ordenadas TASK-001..TASK-NNN con
+      estimation_hours y story_points (obligatorios), depends_on entre tasks y files
+      previstos. Distinguir tasks backend (apps/api, libs/shared-types) de tasks
+      frontend (apps/webapp). Orden respeta: shared-types → schema/migración →
+      endpoints API → seed → shared-types consumido por webapp → componentes UI → tests.
+    note: "Recibe output del Funcional. No necesita la spec completa."
+    output_file: sdd/specs/spec-eburgos-flx-001-kudos-wall/cycles/cycle-01/planner.md
+    tasks_file: sdd/specs/spec-eburgos-flx-001-kudos-wall/cycles/cycle-01/tasks.json
+
+  architect:
+    goal: >
+      Definir schema Postgres definitivo (members, kudos + índice compuesto para cursor
+      y check-constraint de categoría), formalizar contratos REST en sdd/api.json,
+      decidir el mecanismo de migraciones (TypeORM vs Prisma) para apps/api, definir
+      la forma exacta del cursor opaco, la estrategia de rate limiting NestJS, el
+      formato uniforme de error y el conteo por code points del mensaje. Registrar
+      componentes previstos en sdd/components.json (defined).
+    existing_tables: []
+    existing_endpoints: []
+    output_file: sdd/specs/spec-eburgos-flx-001-kudos-wall/cycles/cycle-01/architect.md
+    registers_to_write:
+      - sdd/schema.json
+      - sdd/api.json
+      - sdd/components.json
+
+  implementor_back:
+    goal: >
+      Implementar en apps/api los endpoints, la capa de persistencia (entidades +
+      migración), seed de miembros, validación con class-validator, rate limit por
+      IP, health check, logs estructurados con request_id, y los tests unitarios +
+      e2e supertest. Consumir DTOs desde libs/shared-types.
+    app: apps/api
+    app_context: sdd/context/apps/api/context_prompt.md
+    shared_lib: libs/shared-types
+    shared_lib_context: sdd/context/libs/shared-types/context_prompt.md
+    note: "Recibe una task a la vez del Planner. Nunca comentarios narrativos en el código."
+
+  implementor_front:
+    goal: >
+      Implementar en apps/webapp la ruta / con el muro (grilla responsive, tarjetas,
+      estado vacío, botón "Cargar más"), la ruta /nuevo (o modal) con formulario
+      controlado, validación cliente (S-3, S-4, contador de caracteres), formateo de
+      fecha relativa America/Argentina/Buenos_Aires, banner de error con el code del
+      backend y tests de render + validación. Consumir DTOs desde libs/shared-types.
+    app: apps/webapp
+    app_context: sdd/context/apps/webapp/context_prompt.md
+    shared_lib: libs/shared-types
+    shared_lib_context: sdd/context/libs/shared-types/context_prompt.md
+    note: "Recibe una task a la vez del Planner. Nunca comentarios narrativos en el código."
+
+  reviewer:
+    goal: >
+      Validar todo el output del ciclo contra los 15 CA de la spec, correr los tres
+      gates (SPEC / CONTEXTO / MEMORIA), consolidar telemetría por proveedor/modelo
+      en cycle.json.metrics.usage, mover el módulo a completed_modules en global.json,
+      actualizar sdd/api.json/schema.json/components.json a status implemented/migrated,
+      escribir los fragmentos aditivos en updates/ de los tres subproyectos y dejar
+      pnpm sdd:validate en verde.
+    output_file: sdd/specs/spec-eburgos-flx-001-kudos-wall/cycles/cycle-01/cycle.json
+    checklist: sdd/skills/sdd-reviewer/checklist.md
+    ca_to_validate:
+      - CA-001
+      - CA-002
+      - CA-003
+      - CA-004
+      - CA-005
+      - CA-006
+      - CA-007
+      - CA-008
+      - CA-009
+      - CA-010
+      - CA-011
+      - CA-012
+      - CA-013
+      - CA-014
+      - CA-015

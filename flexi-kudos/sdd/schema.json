@@ -1,32 +1,117 @@
 {
   "$schema": "./schemas/db-schema.schema.json",
   "_comment": "Database schema registry. Grouped by app/lib. Updated by sdd-architect (on design) and sdd-implementor-back (on migration). Source of truth for all tables.",
-  "_schema": {
-    "_structure": "{ [app-key]: { tables: { [table_name]: TableEntry } } }",
-    "_app_keys": "Use the app directory name as key. E.g. 'example-api'. Frontend apps don't have DB tables.",
-    "_update_protocol": {
-      "create": "Set created_in_cycle: N, updated_in_cycle: null, changelog: []. Add migration_file with Flyway format V{N}__create_{table}.sql.",
-      "add_column": "Set updated_in_cycle: N, add column to columns object, add migration_file V{N}__alter_{table}_add_{col}.sql, append to changelog.",
-      "alter_column": "Set updated_in_cycle: N, update column definition, add migration file, append to changelog.",
-      "deprecate_table": "Set status: deprecated, do NOT delete entry — add to changelog with change: 'table deprecated — reason'"
-    },
-    "TableEntry": {
-      "module": "módulo SDD al que pertenece",
-      "spec": "path a la spec que lo originó",
-      "status": "defined | migrated | updated | deprecated",
-      "created_in_cycle": "número de ciclo donde se diseñó por primera vez",
-      "updated_in_cycle": "número del último ciclo que lo modificó (null si nunca se actualizó)",
-      "migration_file": "archivo Flyway más reciente que afecta esta tabla",
-      "columns": {},
-      "indexes": [],
-      "changelog": [
-        {
-          "cycle": 2,
-          "date": "YYYY-MM-DD",
-          "migration": "V2__alter_...",
-          "change": "descripción"
-        }
-      ]
+  "api": {
+    "tables": {
+      "members": {
+        "module": "kudos-wall",
+        "spec": "sdd/specs/spec-eburgos-flx-001-kudos-wall",
+        "status": "migrated",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "migration_file": "apps/api/prisma/migrations/20260824183851_init/migration.sql",
+        "columns": {
+          "id": {
+            "type": "UUID",
+            "constraints": ["PRIMARY KEY", "DEFAULT gen_random_uuid()"],
+            "notes": "Member identifier"
+          },
+          "full_name": {
+            "type": "TEXT",
+            "constraints": ["NOT NULL"],
+            "notes": "Display name used for ordering and UI"
+          },
+          "handle": {
+            "type": "TEXT",
+            "constraints": ["NOT NULL", "UNIQUE"],
+            "notes": "Short unique alias used in the UI"
+          },
+          "is_active": {
+            "type": "BOOLEAN",
+            "constraints": ["NOT NULL", "DEFAULT TRUE"],
+            "notes": "Soft-flag reserved for future cycles; all seeded members are active in v1"
+          },
+          "created_at": {
+            "type": "TIMESTAMPTZ",
+            "constraints": ["NOT NULL", "DEFAULT NOW()"],
+            "notes": "Audit timestamp"
+          }
+        },
+        "indexes": [
+          {
+            "name": "uk_members_handle",
+            "type": "UNIQUE",
+            "columns": ["handle"]
+          },
+          {
+            "name": "idx_members_active_name",
+            "type": "INDEX",
+            "columns": ["is_active", "full_name"]
+          }
+        ],
+        "changelog": []
+      },
+      "kudos": {
+        "module": "kudos-wall",
+        "spec": "sdd/specs/spec-eburgos-flx-001-kudos-wall",
+        "status": "migrated",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "migration_file": "apps/api/prisma/migrations/20260824183851_init/migration.sql",
+        "columns": {
+          "id": {
+            "type": "UUID",
+            "constraints": ["PRIMARY KEY", "DEFAULT gen_random_uuid()"],
+            "notes": "Kudo identifier"
+          },
+          "giver_id": {
+            "type": "UUID",
+            "constraints": ["NOT NULL", "REFERENCES members(id)"],
+            "notes": "Member who gives the kudo"
+          },
+          "receiver_id": {
+            "type": "UUID",
+            "constraints": ["NOT NULL", "REFERENCES members(id)"],
+            "notes": "Member who receives the kudo; must differ from giver_id (CHECK giver_id <> receiver_id)"
+          },
+          "category": {
+            "type": "TEXT",
+            "constraints": [
+              "NOT NULL",
+              "CHECK (category IN ('teamwork','ownership','innovation','delivery','kindness','learning'))"
+            ],
+            "notes": "Closed enum defined in spec S-2"
+          },
+          "message": {
+            "type": "TEXT",
+            "constraints": ["NOT NULL"],
+            "notes": "Plain text 1..280 code points. Length enforced in the application (validator IsMessageLength); a byte-based CHECK (1..1120) acts as a safety net"
+          },
+          "created_at": {
+            "type": "TIMESTAMPTZ",
+            "constraints": ["NOT NULL", "DEFAULT NOW()"],
+            "notes": "Server-side, immutable, UTC"
+          }
+        },
+        "indexes": [
+          {
+            "name": "idx_kudos_feed",
+            "type": "INDEX",
+            "columns": ["created_at", "id"]
+          },
+          {
+            "name": "idx_kudos_giver",
+            "type": "INDEX",
+            "columns": ["giver_id"]
+          },
+          {
+            "name": "idx_kudos_receiver",
+            "type": "INDEX",
+            "columns": ["receiver_id"]
+          }
+        ],
+        "changelog": []
+      }
     }
   }
 }

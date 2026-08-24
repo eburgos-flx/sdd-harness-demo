@@ -3,21 +3,14 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/api/src",
   "projectType": "application",
-  "tags": [
-    "scope:api",
-    "type:app"
-  ],
+  "tags": ["scope:api", "type:app"],
   "targets": {
     "build": {
       "executor": "@nx/webpack:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/api",
-        "main": "apps/api/src/main.ts",
-        "tsConfig": "apps/api/tsconfig.app.json",
-        "compiler": "tsc"
+        "webpackConfig": "apps/api/webpack.config.js"
       }
     },
     "serve": {
@@ -32,7 +25,14 @@
     "test": {
       "executor": "@nx/jest:jest",
       "options": {
-        "jestConfig": "apps/api/jest.config.ts"
+        "jestConfig": "apps/api/jest.config.js"
+      }
+    },
+    "seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec tsx apps/api/prisma/seed.ts",
+        "cwd": "."
       }
     }
   }

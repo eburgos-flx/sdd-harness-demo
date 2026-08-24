@@ -1,0 +1,40 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Member {
+  id         String   @id @default(uuid()) @db.Uuid
+  full_name  String
+  handle     String   @unique
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamptz
+
+  kudos_given    Kudo[] @relation("kudos_given")
+  kudos_received Kudo[] @relation("kudos_received")
+
+  @@index([is_active, full_name], map: "idx_members_active_name")
+  @@map("members")
+}
+
+model Kudo {
+  id          String   @id @default(uuid()) @db.Uuid
+  giver_id    String   @db.Uuid
+  receiver_id String   @db.Uuid
+  category    String
+  message     String
+  created_at  DateTime @default(now()) @db.Timestamptz
+
+  giver    Member @relation("kudos_given", fields: [giver_id], references: [id], onDelete: Restrict)
+  receiver Member @relation("kudos_received", fields: [receiver_id], references: [id], onDelete: Restrict)
+
+  @@index([created_at(sort: Desc), id(sort: Desc)], map: "idx_kudos_feed")
+  @@index([giver_id], map: "idx_kudos_giver")
+  @@index([receiver_id], map: "idx_kudos_receiver")
+  @@map("kudos")
+}

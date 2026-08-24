@@ -1,0 +1,447 @@
+{
+  "$schema": "../../../../schemas/cycle-tasks.schema.json",
+  "spec": "spec-eburgos-flx-001-kudos-wall",
+  "cycle": 1,
+  "module": "kudos-wall",
+  "apps": ["apps/api", "apps/webapp", "libs/shared-types"],
+  "flow": "full",
+  "user_stories_generated": true,
+  "prerequisites": { "tasks_generated": true },
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Publicar DTOs compartidos (MemberDto, CategoryDto, KudoDto, CreateKudoRequest, KudoListResponse, ErrorEnvelope)",
+      "user_stories": ["HU-11"],
+      "estimation_hours": 2,
+      "story_points": 2,
+      "depends_on": [],
+      "status": "done",
+      "files": [
+        "libs/shared-types/src/lib/category.dto.ts",
+        "libs/shared-types/src/lib/member.dto.ts",
+        "libs/shared-types/src/lib/kudo.dto.ts",
+        "libs/shared-types/src/lib/error.dto.ts",
+        "libs/shared-types/src/index.ts"
+      ],
+      "usage": {
+        "tokens_in": 4200,
+        "tokens_out": 800,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-002",
+      "title": "Tests de contrato para CategoryKey y ErrorCode en shared-types",
+      "user_stories": ["HU-02", "HU-04"],
+      "estimation_hours": 1.5,
+      "story_points": 2,
+      "depends_on": ["TASK-001"],
+      "status": "done",
+      "files": [
+        "libs/shared-types/src/lib/category.dto.spec.ts",
+        "libs/shared-types/src/lib/error.dto.spec.ts",
+        "libs/shared-types/jest.config.js",
+        "libs/shared-types/tsconfig.spec.json",
+        "libs/shared-types/project.json"
+      ],
+      "usage": {
+        "tokens_in": 3800,
+        "tokens_out": 600,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-003",
+      "title": "Agregar servicio Postgres al docker-compose y documentar .env.example",
+      "user_stories": ["HU-11"],
+      "estimation_hours": 4,
+      "story_points": 5,
+      "depends_on": [],
+      "status": "done",
+      "files": [
+        "docker-compose.yml",
+        "apps/api/.env.example"
+      ],
+      "usage": {
+        "tokens_in": 1500,
+        "tokens_out": 300,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-004",
+      "title": "Scaffolding NestJS (AppModule + KudosModule + MembersModule + CategoriesModule + HealthModule + PrismaModule) con ValidationPipe global y nestjs-pino",
+      "user_stories": ["HU-09", "HU-11"],
+      "estimation_hours": 3,
+      "story_points": 3,
+      "depends_on": ["TASK-003"],
+      "status": "done",
+      "files": [
+        "apps/api/src/main.ts",
+        "apps/api/src/app.module.ts",
+        "apps/api/src/prisma/prisma.module.ts",
+        "apps/api/src/prisma/prisma.service.ts",
+        "apps/api/webpack.config.js",
+        "apps/api/project.json",
+        "prisma.config.ts",
+        ".env"
+      ],
+      "usage": {
+        "tokens_in": 9200,
+        "tokens_out": 2200,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-005",
+      "title": "Prisma schema (Member, Kudo) + migracion inicial SQL con indice compuesto (created_at desc, id desc) y check-constraints (categoria + giver<>receiver)",
+      "user_stories": ["HU-11", "HU-12"],
+      "estimation_hours": 4,
+      "story_points": 5,
+      "depends_on": ["TASK-004"],
+      "status": "done",
+      "files": [
+        "apps/api/prisma/schema.prisma",
+        "apps/api/prisma/migrations/20260824183851_init/migration.sql",
+        "apps/api/prisma/migrations/20260824183900_add_check_constraints/migration.sql",
+        "apps/api/prisma/migrations/migration_lock.toml"
+      ],
+      "usage": {
+        "tokens_in": 5400,
+        "tokens_out": 1100,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-006",
+      "title": "Seed idempotente de miembros del equipo + target Nx api:seed",
+      "user_stories": ["HU-01"],
+      "estimation_hours": 2,
+      "story_points": 2,
+      "depends_on": ["TASK-005"],
+      "status": "done",
+      "files": [
+        "apps/api/prisma/seed.ts",
+        "apps/api/project.json",
+        "package.json"
+      ],
+      "usage": {
+        "tokens_in": 2100,
+        "tokens_out": 500,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-007",
+      "title": "Endpoint GET /v1/members ordenado por full_name asc case-insensitive",
+      "user_stories": ["HU-01"],
+      "estimation_hours": 2,
+      "story_points": 2,
+      "depends_on": ["TASK-006"],
+      "status": "done",
+      "files": [
+        "apps/api/src/members/members.controller.ts",
+        "apps/api/src/members/members.service.ts",
+        "apps/api/src/members/members.module.ts"
+      ],
+      "usage": {
+        "tokens_in": 2600,
+        "tokens_out": 700,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-008",
+      "title": "Endpoint GET /v1/categories con enum fijo (key + label en espanol)",
+      "user_stories": ["HU-02"],
+      "estimation_hours": 1,
+      "story_points": 1,
+      "depends_on": ["TASK-004"],
+      "status": "done",
+      "files": [
+        "apps/api/src/categories/categories.constants.ts",
+        "apps/api/src/categories/categories.controller.ts",
+        "apps/api/src/categories/categories.module.ts"
+      ],
+      "usage": {
+        "tokens_in": 1600,
+        "tokens_out": 400,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-009",
+      "title": "Endpoint POST /v1/kudos con validacion class-validator, IsMessageLength por code points y reglas de negocio (anti self-kudo, member exists)",
+      "user_stories": ["HU-03", "HU-04"],
+      "estimation_hours": 4,
+      "story_points": 5,
+      "depends_on": ["TASK-005", "TASK-007", "TASK-008"],
+      "status": "done",
+      "files": [
+        "apps/api/src/kudos/kudos.controller.ts",
+        "apps/api/src/kudos/kudos.service.ts",
+        "apps/api/src/kudos/kudos.module.ts",
+        "apps/api/src/kudos/dto/create-kudo.dto.ts",
+        "apps/api/src/kudos/validators/message-length.validator.ts"
+      ],
+      "usage": {
+        "tokens_in": 6800,
+        "tokens_out": 1700,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-010",
+      "title": "Endpoint GET /v1/kudos con cursor opaco HMAC-firmado, limit default 20 y cap 50",
+      "user_stories": ["HU-05"],
+      "estimation_hours": 5,
+      "story_points": 5,
+      "depends_on": ["TASK-009"],
+      "status": "done",
+      "files": [
+        "apps/api/src/kudos/cursor.util.ts",
+        "apps/api/src/kudos/dto/list-kudos.query.ts",
+        "apps/api/src/kudos/kudos.service.ts",
+        "apps/api/src/kudos/kudos.controller.ts"
+      ],
+      "usage": {
+        "tokens_in": 5100,
+        "tokens_out": 1400,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-011",
+      "title": "Endpoint GET /healthz",
+      "user_stories": ["HU-09"],
+      "estimation_hours": 0.5,
+      "story_points": 1,
+      "depends_on": ["TASK-004"],
+      "status": "done",
+      "files": [
+        "apps/api/src/health/health.controller.ts",
+        "apps/api/src/health/health.module.ts"
+      ],
+      "usage": {
+        "tokens_in": 900,
+        "tokens_out": 200,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-012",
+      "title": "Rate limit 60 req/min por IP en POST /v1/kudos con @nestjs/throttler y guard custom",
+      "user_stories": ["HU-10"],
+      "estimation_hours": 2,
+      "story_points": 2,
+      "depends_on": ["TASK-009"],
+      "status": "done",
+      "files": [
+        "apps/api/src/app.module.ts",
+        "apps/api/src/kudos/kudos.controller.ts",
+        "apps/api/src/health/health.controller.ts",
+        "apps/api/src/members/members.controller.ts",
+        "apps/api/src/categories/categories.controller.ts"
+      ],
+      "usage": {
+        "tokens_in": 2100,
+        "tokens_out": 500,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-013",
+      "title": "Filtro global de excepciones + envelope de error uniforme + exceptions custom del dominio",
+      "user_stories": ["HU-04"],
+      "estimation_hours": 3,
+      "story_points": 3,
+      "depends_on": ["TASK-009"],
+      "status": "done",
+      "files": [
+        "apps/api/src/common/exceptions/domain.exceptions.ts",
+        "apps/api/src/common/filters/http-exception.filter.ts",
+        "apps/api/src/main.ts"
+      ],
+      "usage": {
+        "tokens_in": 3800,
+        "tokens_out": 1100,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-014",
+      "title": "Tests unitarios de KudosService + e2e supertest (happy path, errores clave, rate limit, healthz)",
+      "user_stories": ["HU-13"],
+      "estimation_hours": 5,
+      "story_points": 5,
+      "depends_on": ["TASK-010", "TASK-011", "TASK-012", "TASK-013"],
+      "status": "done",
+      "files": [
+        "apps/api/jest.config.js",
+        "apps/api/tsconfig.spec.json",
+        "apps/api/src/kudos/kudos.service.spec.ts",
+        "apps/api/src/kudos/cursor.util.spec.ts",
+        "apps/api/src/kudos/validators/message-length.validator.spec.ts",
+        "apps/api/test/kudos.e2e-spec.ts",
+        "apps/api/test/setup-env.ts"
+      ],
+      "usage": {
+        "tokens_in": 8400,
+        "tokens_out": 2600,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-015",
+      "title": "Api-client tipado del webapp (listMembers, listCategories, listKudos, createKudo) con KudosApiError",
+      "user_stories": ["HU-01", "HU-02", "HU-03", "HU-05"],
+      "estimation_hours": 2,
+      "story_points": 2,
+      "depends_on": ["TASK-001"],
+      "status": "done",
+      "files": [
+        "apps/webapp/src/api/errors.ts",
+        "apps/webapp/src/api/kudos-client.ts"
+      ],
+      "usage": {
+        "tokens_in": 2400,
+        "tokens_out": 700,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-016",
+      "title": "Pagina KudosWallPage (ruta /) con grilla responsive, KudoCard, EmptyState y boton Cargar mas",
+      "user_stories": ["HU-05", "HU-07", "HU-08"],
+      "estimation_hours": 4,
+      "story_points": 5,
+      "depends_on": ["TASK-015"],
+      "status": "done",
+      "files": [
+        "apps/webapp/src/pages/KudosWallPage.tsx",
+        "apps/webapp/src/components/KudoCard.tsx",
+        "apps/webapp/src/components/EmptyState.tsx",
+        "apps/webapp/src/components/CategoryChip.tsx"
+      ],
+      "usage": {
+        "tokens_in": 4600,
+        "tokens_out": 1600,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-017",
+      "title": "Utilidades de formato de fecha relativa y absoluta en America/Argentina/Buenos_Aires",
+      "user_stories": ["HU-08"],
+      "estimation_hours": 1.5,
+      "story_points": 2,
+      "depends_on": [],
+      "status": "done",
+      "files": [
+        "apps/webapp/src/utils/date.ts",
+        "apps/webapp/src/utils/date.spec.ts"
+      ],
+      "usage": {
+        "tokens_in": 1900,
+        "tokens_out": 500,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-018",
+      "title": "Pagina NewKudoPage (ruta /nuevo) con formulario controlado, contador de code points y validacion cliente",
+      "user_stories": ["HU-06"],
+      "estimation_hours": 4,
+      "story_points": 5,
+      "depends_on": ["TASK-015", "TASK-016"],
+      "status": "done",
+      "files": [
+        "apps/webapp/src/pages/NewKudoPage.tsx",
+        "apps/webapp/src/components/KudoForm.tsx"
+      ],
+      "usage": {
+        "tokens_in": 4200,
+        "tokens_out": 1500,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-019",
+      "title": "Router + layout + MembersCategoriesProvider (contexto compartido de listas)",
+      "user_stories": ["HU-05", "HU-06", "HU-07"],
+      "estimation_hours": 2,
+      "story_points": 2,
+      "depends_on": ["TASK-016", "TASK-018"],
+      "status": "done",
+      "files": [
+        "apps/webapp/src/app/app.tsx",
+        "apps/webapp/src/context/MembersCategoriesProvider.tsx"
+      ],
+      "usage": {
+        "tokens_in": 2200,
+        "tokens_out": 800,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-020",
+      "title": "Tests frontend: render del muro con datos mockeados + validacion del formulario",
+      "user_stories": ["HU-13"],
+      "estimation_hours": 3,
+      "story_points": 3,
+      "depends_on": ["TASK-016", "TASK-018", "TASK-019"],
+      "status": "done",
+      "files": [
+        "apps/webapp/vite.config.ts",
+        "apps/webapp/src/test-setup.ts",
+        "apps/webapp/src/pages/KudosWallPage.spec.tsx",
+        "apps/webapp/src/components/KudoForm.spec.tsx"
+      ],
+      "usage": {
+        "tokens_in": 5400,
+        "tokens_out": 1900,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    }
+  ]
+}

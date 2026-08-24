@@ -12,4 +12,15 @@ export default defineConfig({
     outDir: resolve(__dirname, '../../dist/apps/webapp'),
     emptyOutDir: true,
   },
+  resolve: {
+    alias: {
+      '@shared-types': resolve(__dirname, '../../libs/shared-types/src/index.ts'),
+    },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: [resolve(__dirname, 'src/test-setup.ts')],
+    include: ['src/**/*.spec.{ts,tsx}'],
+  },
 });
