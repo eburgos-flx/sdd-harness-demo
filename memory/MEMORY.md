@@ -8,4 +8,5 @@ aplique. El protocolo y el formato de las entradas están en [AGENTS.md](../AGEN
 - [Las imperfecciones de legacy-shop son guionadas](legacy-shop-imperfecciones-guionadas.md) — qué NO refactorizar y por qué.
 - [Imágenes del catálogo](imagenes-del-catalogo.md) — ids de picsum elegidos a mano y el fallback offline.
 - [Verificación visual con Chrome headless](verificacion-visual-chrome-headless.md) — el bridge de Playwright MCP no levanta acá.
+- [Invocación del CLI del kit](invocacion-de-la-cli.md) — por qué no se instala en el root y qué toca `configure sdd`.
 - [pnpm en todos los proyectos](pnpm-en-todos-los-proyectos.md) — la migración y el `onlyBuiltDependencies` de esbuild.
