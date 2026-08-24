@@ -18,4 +18,4 @@ La historia falsa además no aportaba: el guion nunca corre `git log`, corre `gi
 (`init` de Nx lo hace), borrarlo antes de commitear. El efecto "proyecto viejo" se cuenta
 con el código y el README del proyecto, no con la historia de git.
 
-Ver [[checkpoints-prefijados-por-proyecto]].
+Ver [[ramas-de-la-demo]].
