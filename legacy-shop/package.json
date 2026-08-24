@@ -7,8 +7,9 @@
   "engines": {
     "node": ">=20"
   },
+  "packageManager": "pnpm@10.14.0",
   "scripts": {
-    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm run dev:server\" \"npm run dev:client\"",
+    "dev": "concurrently -k -n api,web -c cyan,magenta \"pnpm run dev:server\" \"pnpm run dev:client\"",
     "dev:server": "node --watch server/src/index.js",
     "dev:client": "vite --config client/vite.config.js",
     "start": "node server/src/index.js",
@@ -25,5 +26,10 @@
     "@vitejs/plugin-react": "^4.3.4",
     "concurrently": "^9.1.2",
     "vite": "^6.0.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

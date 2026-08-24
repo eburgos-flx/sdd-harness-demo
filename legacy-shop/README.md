@@ -10,8 +10,8 @@ en 2023 para vender accesorios de escritorio al equipo.
 ## Levantarlo
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 | Servicio | URL |
@@ -19,8 +19,11 @@ npm run dev
 | Front (Vite) | http://localhost:5173 |
 | API (Fastify) | http://localhost:3001 |
 
-`npm run dev` levanta los dos con concurrently. Tambien estan `npm run dev:server`,
-`npm run dev:client` y `npm run build` (deja el bundle en `dist/`).
+`pnpm dev` levanta los dos con concurrently. Tambien estan `pnpm dev:server`,
+`pnpm dev:client` y `pnpm build` (deja el bundle en `dist/`).
+
+El proyecto usa **pnpm** (`packageManager` fijo en `package.json`). El lockfile que vale es
+`pnpm-lock.yaml`; no generes `package-lock.json`.
 
 ## Endpoints
 
