@@ -1,0 +1,14 @@
+{
+  "mode": "nx",
+  "project": {
+    "name": "flexi-kudos",
+    "description": "Muro de reconocimientos de equipo",
+    "packageScope": "@flexi-kudos"
+  },
+  "apps": [
+    { "name": "api", "type": "nestjs" },
+    { "name": "web", "type": "react" }
+  ],
+  "libs": [{ "name": "shared-types", "type": "shared-types" }],
+  "services": [{ "type": "postgres" }]
+}
