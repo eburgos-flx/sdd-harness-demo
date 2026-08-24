@@ -17,6 +17,12 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.enableCors({
+    origin: process.env['CORS_ORIGIN']?.split(',').map((o) => o.trim()) ?? [
+      'http://localhost:4200',
+    ],
+    credentials: false,
+  });
   const port = Number(process.env['PORT'] ?? 3000);
   await app.listen(port);
 }

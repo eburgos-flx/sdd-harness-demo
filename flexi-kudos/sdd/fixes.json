@@ -4,5 +4,33 @@
   "_version": "3.0.0",
   "_convention": "Fix ID format: FIX-[gh-user]-[spec-NNN]-[seq] for spec-scoped fixes. FIX-[gh-user]-[seq] for repo-level fixes.",
   "_keywords": ["[FIX]", "[BUGFIX]", "[HOTFIX]", "[IMPROVEMENT]"],
-  "fixes": []
+  "fixes": [
+    {
+      "id": "FIX-eburgos-flx-001-001",
+      "author": "eburgos-flx",
+      "spec_id": "spec-eburgos-flx-001-kudos-wall",
+      "fix_document": "sdd/specs/spec-eburgos-flx-001-kudos-wall/fixes/fix-eburgos-flx-001-001.md",
+      "type": "BUGFIX",
+      "severity": "high",
+      "created_at": "2026-08-24",
+      "resolved_at": "2026-08-24",
+      "validated_at": null,
+      "title": "CORS habilitado en la API para el origen del webapp",
+      "estimation_hours": 0.25,
+      "description": "El preflight OPTIONS de :4200 → :3000 devolvia 404 porque main.ts no llamaba a app.enableCors(). Consecuencia: el muro no cargaba desde el navegador.",
+      "justification": "≤5 archivos, sin cambios de contrato ni de datos, ciclo-01 cerrado. Reabrir un ciclo para una linea no es proporcional.",
+      "related_modules": ["kudos-wall"],
+      "affected_files": ["apps/api/src/main.ts"],
+      "test_reference": null,
+      "status": "implemented",
+      "cycle": null,
+      "usage": {
+        "tokens_in": 8000,
+        "tokens_out": 900,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    }
+  ]
 }
