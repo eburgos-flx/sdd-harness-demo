@@ -1,0 +1,9 @@
+# Material de la presentación: es informacion propia, no se publica
+demo/
+
+node_modules
+dist
+.DS_Store
+*.log
+.env
+.env.local
