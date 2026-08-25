@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../schemas/cycle.schema.json",
+  "cycle": 1,
+  "module": "poll-close",
+  "spec": "spec-eburgos-003-poll-close",
+  "apps": ["apps/quick-polls"],
+  "flow": "reduced",
+  "status": "completed",
+  "started_at": "2026-08-24",
+  "completed_at": "2026-08-24",
+  "documents": {
+    "tasks": "sdd/specs/spec-eburgos-003-poll-close/cycles/cycle-01/tasks.json"
+  },
+  "artifacts": [],
+  "metrics": {
+    "tasks_total": 2,
+    "tasks_completed": 2,
+    "story_points": 5,
+    "files_created": [
+      "app/api/polls/[id]/close/route.ts",
+      "app/p/[id]/manage/page.tsx",
+      "app/p/[id]/manage/close-button.tsx"
+    ],
+    "files_modified": [],
+    "files_deleted": [],
+    "usage": {
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "approx": true,
+      "source": "declared-estimate",
+      "by_tier": {
+        "claude/opus": {
+          "tokens_in": 12000,
+          "tokens_out": 4500,
+          "approx": true,
+          "source": "declared-estimate"
+        }
+      }
+    }
+  },
+  "tables_created": [],
+  "endpoints_implemented": [],
+  "components_created": [],
+  "issues_found": [],
+  "reviewer_report": {
+    "approved": true,
+    "date": "2026-08-24",
+    "ca_results": {
+      "CA-001": "PASS — POST close with valid adminToken returns 200 and mutates status to closed",
+      "CA-002": "PASS — invalid token returns 403 (constant-time compare via timingSafeEqual)",
+      "CA-003": "PASS — closing an already-closed poll returns 200 (updatePoll no-op branch)",
+      "CA-004": "PASS — subsequent vote returns 410 (verified via spec-002 vote route reading status)"
+    },
+    "tests": {
+      "typecheck": "PASS",
+      "build": "PASS — /api/polls/[id]/close and /p/[id]/manage compiled"
+    },
+    "notes": "Manage page hides existence when token is missing/invalid (notFound()). Token comparison uses timingSafeEqual on buffers of equal length (short-circuits before compare to avoid throwing on length mismatch).",
+    "follow_ups": []
+  }
+}

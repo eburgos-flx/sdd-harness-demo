@@ -1,0 +1,61 @@
+{
+  "$schema": "../../../../schemas/cycle.schema.json",
+  "cycle": 1,
+  "module": "poll-results",
+  "spec": "spec-eburgos-004-poll-results",
+  "apps": ["apps/quick-polls"],
+  "flow": "reduced",
+  "status": "completed",
+  "started_at": "2026-08-24",
+  "completed_at": "2026-08-24",
+  "documents": {
+    "tasks": "sdd/specs/spec-eburgos-004-poll-results/cycles/cycle-01/tasks.json"
+  },
+  "artifacts": [],
+  "metrics": {
+    "tasks_total": 3,
+    "tasks_completed": 3,
+    "story_points": 7,
+    "files_created": [
+      "app/p/[id]/results/page.tsx",
+      "app/p/[id]/results/results-view.tsx",
+      "app/p/[id]/results/bar-chart.tsx"
+    ],
+    "files_modified": ["package.json", "pnpm-lock.yaml"],
+    "files_deleted": [],
+    "usage": {
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "approx": true,
+      "source": "declared-estimate",
+      "by_tier": {
+        "claude/opus": {
+          "tokens_in": 14000,
+          "tokens_out": 5500,
+          "approx": true,
+          "source": "declared-estimate"
+        }
+      }
+    }
+  },
+  "tables_created": [],
+  "endpoints_implemented": [],
+  "components_created": [],
+  "issues_found": [],
+  "reviewer_report": {
+    "approved": true,
+    "date": "2026-08-24",
+    "ca_results": {
+      "CA-001": "PASS — SSR page pre-renders BarChart via initial props from getPoll",
+      "CA-002": "PASS — client interval polls /api/polls/:id every 3s while status=open",
+      "CA-003": "PASS — polling short-circuits when status=closed; chip shows 'Closed'",
+      "CA-004": "PASS — pct handles total=0 with a guard (returns 0 instead of NaN)"
+    },
+    "tests": {
+      "typecheck": "PASS",
+      "build": "PASS — /p/[id]/results compiled with dynamic recharts chunk"
+    },
+    "notes": "recharts imported via next/dynamic ssr:false to avoid hydration mismatch on ResponsiveContainer measurements. Polling uses AbortController-less pattern with a cancel flag; safe for interval-only teardown.",
+    "follow_ups": ["Backlog agotado — ver telemetría acumulada del proyecto en `sdd/global.json`."]
+  }
+}

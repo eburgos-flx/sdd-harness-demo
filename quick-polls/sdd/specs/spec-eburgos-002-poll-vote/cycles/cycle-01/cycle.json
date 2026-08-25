@@ -1,0 +1,62 @@
+{
+  "$schema": "../../../../schemas/cycle.schema.json",
+  "cycle": 1,
+  "module": "poll-vote",
+  "spec": "spec-eburgos-002-poll-vote",
+  "apps": ["apps/quick-polls"],
+  "flow": "reduced",
+  "status": "completed",
+  "started_at": "2026-08-24",
+  "completed_at": "2026-08-24",
+  "documents": {
+    "tasks": "sdd/specs/spec-eburgos-002-poll-vote/cycles/cycle-01/tasks.json"
+  },
+  "artifacts": [],
+  "metrics": {
+    "tasks_total": 2,
+    "tasks_completed": 2,
+    "story_points": 6,
+    "files_created": [
+      "app/api/polls/[id]/vote/route.ts",
+      "app/p/[id]/page.tsx",
+      "app/p/[id]/vote-form.tsx"
+    ],
+    "files_modified": [],
+    "files_deleted": [],
+    "usage": {
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "approx": true,
+      "source": "declared-estimate",
+      "by_tier": {
+        "claude/opus": {
+          "tokens_in": 14000,
+          "tokens_out": 5000,
+          "approx": true,
+          "source": "declared-estimate"
+        }
+      }
+    }
+  },
+  "tables_created": [],
+  "endpoints_implemented": [],
+  "components_created": [],
+  "issues_found": [],
+  "reviewer_report": {
+    "approved": true,
+    "date": "2026-08-24",
+    "ca_results": {
+      "CA-001": "PASS — first vote returns 204 and sets httpOnly cookie voted_[id]=1 (1y maxAge)",
+      "CA-002": "PASS — second vote from same browser returns 409 (cookie check before body parse)",
+      "CA-003": "PASS — vote on closed poll returns 410",
+      "CA-004": "PASS — invalid optionIndex returns 400 (Zod) or out_of_range 400",
+      "CA-005": "PASS — vote persisted via updatePoll under same rename-lock chain as create"
+    },
+    "tests": {
+      "typecheck": "PASS",
+      "build": "PASS — new routes /api/polls/[id]/vote and /p/[id] compiled"
+    },
+    "notes": "Vote count mutation goes through the shared updatePoll (serialized writeChain), so a burst of votes and a close cannot interleave torn writes.",
+    "follow_ups": []
+  }
+}

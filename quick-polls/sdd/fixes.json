@@ -1,0 +1,49 @@
+{
+  "$schema": "./schemas/fixes.schema.json",
+  "_description": "Global fixes index. Each fix maps to its owning spec via spec_id. Fixes not tied to a spec have spec_id: null and live in sdd/fixes.md. Spec-scoped fixes live in sdd/specs/{spec-id}/fixes.md. Maintained by: sdd-orchestrator.",
+  "_version": "3.0.0",
+  "_convention": "Fix ID format: FIX-[gh-user]-[spec-NNN]-[seq] for spec-scoped fixes. FIX-[gh-user]-[seq] for repo-level fixes.",
+  "_keywords": ["[FIX]", "[BUGFIX]", "[HOTFIX]", "[IMPROVEMENT]"],
+  "fixes": [
+    {
+      "id": "FIX-eburgos-001",
+      "author": "eburgos",
+      "spec_id": null,
+      "fix_document": "sdd/fixes/fix-eburgos-001.md",
+      "type": "IMPROVEMENT",
+      "severity": "medium",
+      "created_at": "2026-08-24",
+      "resolved_at": "2026-08-24",
+      "title": "Visual redesign of all 4 pages using Tailwind v4 + Framer Motion + design-taste-frontend baseline",
+      "estimation_hours": 2.5,
+      "description": "Introduce Tailwind v4, Framer Motion, Phosphor icons and Geist font, then rewrite the styling of the home form, vote page, manage panel and results page. Contract and behavior untouched — pure surface change.",
+      "justification": "Ships polished UI cross-cutting all 4 modules without fragmenting 4 separate cycles. Existing specs make no claims about visual design, so this is out-of-spec but non-breaking.",
+      "related_modules": ["poll-create", "poll-vote", "poll-close", "poll-results"],
+      "affected_files": [
+        "package.json",
+        "postcss.config.js",
+        "app/globals.css",
+        "app/layout.tsx",
+        "app/page.tsx",
+        "app/create-poll-form.tsx",
+        "app/p/[id]/page.tsx",
+        "app/p/[id]/vote-form.tsx",
+        "app/p/[id]/manage/page.tsx",
+        "app/p/[id]/manage/close-button.tsx",
+        "app/p/[id]/results/page.tsx",
+        "app/p/[id]/results/results-view.tsx",
+        "app/p/[id]/results/bar-chart.tsx"
+      ],
+      "test_reference": "pnpm build + curl E2E from spec-004 verify",
+      "status": "implemented",
+      "cycle": null,
+      "usage": {
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    }
+  ]
+}
