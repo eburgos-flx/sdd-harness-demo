@@ -43,8 +43,12 @@ export function removeLine(cartId, productId) {
   return post('/cart/remove', { cartId, productId });
 }
 
-export function checkout(cartId, customer) {
-  return post('/checkout', { cartId, customer });
+export function validateCoupon(cartId, couponCode) {
+  return post('/coupons/validate', { cartId, couponCode });
+}
+
+export function checkout(cartId, customer, couponCode) {
+  return post('/checkout', { cartId, customer, couponCode });
 }
 
 function post(path, body) {

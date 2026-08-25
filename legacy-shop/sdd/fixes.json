@@ -1,0 +1,44 @@
+{
+  "$schema": "./schemas/fixes.schema.json",
+  "_description": "Global fixes index. Each fix maps to its owning spec via spec_id. Fixes not tied to a spec have spec_id: null and live in sdd/fixes.md. Spec-scoped fixes live in sdd/specs/{spec-id}/fixes.md. Maintained by: sdd-orchestrator.",
+  "_version": "3.0.0",
+  "_convention": "Fix ID format: FIX-[gh-user]-[spec-NNN]-[seq] for spec-scoped fixes. FIX-[gh-user]-[seq] for repo-level fixes.",
+  "_keywords": [
+    "[FIX]",
+    "[BUGFIX]",
+    "[HOTFIX]",
+    "[IMPROVEMENT]"
+  ],
+  "fixes": [
+    {
+      "id": "FIX-eburgos-flx-001",
+      "author": "eburgos-flx",
+      "spec_id": null,
+      "fix_document": "sdd/fixes/fix-eburgos-flx-001.md",
+      "type": "BUGFIX",
+      "severity": "high",
+      "created_at": "2026-08-24",
+      "resolved_at": "2026-08-24",
+      "validated_at": "2026-08-24",
+      "title": "pnpm-lock.yaml desactualizado rompe pnpm sdd:validate y el gate de CI",
+      "estimation_hours": 0.2,
+      "description": "ajv y ajv-formats estaban en package.json pero no en pnpm-lock.yaml: sdd:validate abortaba con ERR_MODULE_NOT_FOUND y frozen-lockfile (modo CI) con ERR_PNPM_OUTDATED_LOCKFILE.",
+      "justification": "Es la herramienta de verificacion del propio sistema SDD: sin ella no se puede cerrar ningun ciclo ni mergear ningun PR que toque sdd/**.",
+      "related_modules": [],
+      "affected_files": [
+        "pnpm-lock.yaml"
+      ],
+      "test_reference": "pnpm install --frozen-lockfile && pnpm sdd:validate",
+      "status": "validated",
+      "cycle": null,
+      "usage": {
+        "tokens_in": 60000,
+        "tokens_out": 2000,
+        "duration_minutes": 8,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    }
+  ]
+}

@@ -730,6 +730,36 @@ textarea {
   color: var(--danger);
 }
 
+.coupon__row {
+  display: flex;
+  gap: 8px;
+}
+
+.coupon__row input {
+  flex: 1;
+  text-transform: uppercase;
+}
+
+.coupon__applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fbfaf8;
+  font-size: 13.5px;
+}
+
+.coupon__applied .link-back {
+  padding: 0;
+}
+
+.totals__row--discount {
+  color: var(--accent);
+}
+
 .alert {
   margin: 12px 20px 0;
   padding: 10px 12px;
