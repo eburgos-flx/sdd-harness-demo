@@ -1,0 +1,26 @@
+{
+  "$schema": "./schemas/global.schema.json",
+  "project": "legacy-shop",
+  "description": "Catálogo con carrito existente",
+  "version": "0.1.0",
+  "completed_modules": [],
+  "in_progress_modules": [
+    {
+      "module": "checkout-coupon",
+      "spec": "spec-eburgos-flx-001-checkout-coupon",
+      "apps": [
+        "apps/legacy-shop"
+      ],
+      "description": "Cupón de descuento porcentual aplicado y validado en el checkout, con revalidación en el server al confirmar."
+    }
+  ],
+  "pending_modules": [],
+  "monorepo": {
+    "tool": "none (standalone repo)",
+    "package_manager": "pnpm",
+    "apps": {
+      "legacy-shop": ". — app (standalone: código en la raíz del repo)"
+    },
+    "libs": {}
+  }
+}

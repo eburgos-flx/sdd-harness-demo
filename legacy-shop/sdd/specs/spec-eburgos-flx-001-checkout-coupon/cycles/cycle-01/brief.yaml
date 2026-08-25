@@ -1,0 +1,83 @@
+# sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/brief.yaml
+# Generado por: sdd-orchestrator
+# Al: iniciar el ciclo
+
+cycle: 1
+module: checkout-coupon
+phase: checkout-discount
+date: 2026-08-24
+app_context: sdd/context/apps/legacy-shop/context_prompt.md
+
+objective: |
+  Quien compra puede ingresar un código de cupón en el checkout, ver el descuento
+  porcentual aplicado sobre el subtotal antes de confirmar, y confirmar la compra con
+  ese descuento revalidado en el servidor.
+
+scope:
+  - Colección `coupons` en server/data/store.json, leída por accessors de server/src/store.js
+  - Endpoint de validación previa del cupón (no muta carrito ni crea orden)
+  - POST /checkout acepta el código, lo revalida y recalcula totales con descuento
+  - La orden confirmada registra cupón, porcentaje y monto descontado
+  - Campo de cupón en client/src/components/CheckoutForm.jsx: aplicar, ver, quitar, error
+
+out_of_scope:
+  - ABM de cupones por UI o API (se editan a mano en el JSON del store)
+  - Límites de uso por persona o por cupón (no hay persistencia ni identidad)
+  - Cupones de monto fijo, envío gratis, 2x1 o restricciones por producto/categoría
+  - Mostrar el descuento en CartDrawer (el cupón vive en el paso de checkout)
+  - Refactor de la deuda del handler /checkout (duplicación de calcTotals, envío hardcodeado)
+  - Introducir framework de tests
+
+dependencies_required: []
+
+agent_contexts:
+  functional:
+    goal: >
+      Convertir los 14 RF de la spec en historias de usuario verificables, con las reglas
+      de negocio del descuento (base de cálculo, redondeo, umbral de envío, motivos de
+      rechazo) explicitadas y sin ambigüedad para el planner y el arquitecto.
+    business_context: >
+      Tienda interna de accesorios de escritorio. Hoy las promociones se resuelven a mano
+      corrigiendo precios después de la compra. El cupón permite definir una campaña
+      agregando una entrada al JSON del store, sin tocar precios de productos, y deja el
+      descuento registrado en la orden.
+    relevant_spec_sections:
+      - Requisitos Funcionales (RF-1 a RF-14)
+      - Restricciones del legacy
+      - Supuestos (S-1 a S-7)
+
+  planner:
+    goal: >
+      Ordenar las tasks técnicas de backend y frontend respetando la dependencia
+      dato → accessor → validación → checkout → UI, con estimación por task.
+    output_file: sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/planner.md
+
+  architect:
+    goal: >
+      Definir la forma del cupón en el store, la firma de los accessors, el contrato del
+      endpoint de validación, el delta del contrato de /checkout y la forma de los totales
+      con descuento. Registrar los endpoints en sdd/api.json.
+    existing_tables: []
+    existing_endpoints: []
+    output_file: sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/architect.md
+
+  implementor_back:
+    goal: >
+      Cupones en el store + accessors + endpoint de validación + descuento en /checkout,
+      respetando las Restricciones del legacy de la spec: totales siempre en el server,
+      acceso a datos solo por store.js, estilo de rutas de routes/products.js, envelope de
+      error existente, /settings sin exponer cupones, y la deuda del handler intacta.
+    app: apps/legacy-shop
+    app_context: sdd/context/apps/legacy-shop/context_prompt.md
+
+  implementor_front:
+    goal: >
+      Campo de cupón en CheckoutForm.jsx (aplicar / quitar / error) y línea de descuento en
+      el bloque de totales, más el cliente HTTP en client/src/api.js. El front nunca envía
+      el monto de descuento, solo el código.
+    app: apps/legacy-shop
+    app_context: sdd/context/apps/legacy-shop/context_prompt.md
+
+  reviewer:
+    goal: Validar todo el output del ciclo contra los CA-001..CA-011 de la spec
+    output_file: sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/cycle.json

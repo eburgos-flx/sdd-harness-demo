@@ -1,0 +1,245 @@
+{
+  "$schema": "../../../../schemas/cycle-tasks.schema.json",
+  "spec": "spec-eburgos-flx-001-checkout-coupon",
+  "cycle": 1,
+  "module": "checkout-coupon",
+  "apps": [
+    "apps/legacy-shop"
+  ],
+  "flow": "full",
+  "user_stories_generated": true,
+  "prerequisites": {
+    "tasks_generated": true
+  },
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Colección coupons en el store y accessor findCoupon",
+      "user_stories": [
+        "HU-01",
+        "HU-02",
+        "HU-03"
+      ],
+      "estimation_hours": 1.5,
+      "story_points": 2,
+      "depends_on": [],
+      "status": "done",
+      "files": [
+        "server/data/store.json",
+        "server/src/store.js"
+      ],
+      "usage": {
+        "tokens_in": 60000,
+        "tokens_out": 2500,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-002",
+      "title": "Reglas del cupón en utils.js: calcCouponDiscount y resolveCoupon",
+      "user_stories": [
+        "HU-01",
+        "HU-02",
+        "HU-03",
+        "HU-04"
+      ],
+      "estimation_hours": 2,
+      "story_points": 2,
+      "depends_on": [
+        "TASK-001"
+      ],
+      "status": "done",
+      "files": [
+        "server/src/utils.js"
+      ],
+      "usage": {
+        "tokens_in": 80000,
+        "tokens_out": 3500,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-003",
+      "title": "Endpoint POST /coupons/validate en el estilo plugin de products.js",
+      "user_stories": [
+        "HU-01",
+        "HU-02",
+        "HU-03"
+      ],
+      "estimation_hours": 2,
+      "story_points": 2,
+      "depends_on": [
+        "TASK-002"
+      ],
+      "status": "done",
+      "files": [
+        "server/src/routes/coupons.js",
+        "server/src/index.js",
+        "server/src/utils.js"
+      ],
+      "usage": {
+        "tokens_in": 90000,
+        "tokens_out": 4000,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-004",
+      "title": "Descuento revalidado en POST /checkout con totals.discount y order.coupon",
+      "user_stories": [
+        "HU-04",
+        "HU-05",
+        "HU-07"
+      ],
+      "estimation_hours": 3,
+      "story_points": 3,
+      "depends_on": [
+        "TASK-002"
+      ],
+      "status": "done",
+      "files": [
+        "server/src/index.js"
+      ],
+      "usage": {
+        "tokens_in": 110000,
+        "tokens_out": 4500,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-005",
+      "title": "Cliente HTTP del cupón en client/src/api.js",
+      "user_stories": [
+        "HU-06"
+      ],
+      "estimation_hours": 1,
+      "story_points": 1,
+      "depends_on": [
+        "TASK-003",
+        "TASK-004"
+      ],
+      "status": "done",
+      "files": [
+        "client/src/api.js"
+      ],
+      "usage": {
+        "tokens_in": 60000,
+        "tokens_out": 1500,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-006",
+      "title": "Campo de cupón y línea de descuento en CheckoutForm",
+      "user_stories": [
+        "HU-06"
+      ],
+      "estimation_hours": 3,
+      "story_points": 3,
+      "depends_on": [
+        "TASK-005"
+      ],
+      "status": "done",
+      "files": [
+        "client/src/components/CheckoutForm.jsx",
+        "client/src/styles.css"
+      ],
+      "usage": {
+        "tokens_in": 120000,
+        "tokens_out": 6000,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-007",
+      "title": "Wiring de CartDrawer y App: cartId, couponCode y rechazo al confirmar",
+      "user_stories": [
+        "HU-05",
+        "HU-06",
+        "HU-07"
+      ],
+      "estimation_hours": 2,
+      "story_points": 2,
+      "depends_on": [
+        "TASK-006"
+      ],
+      "status": "done",
+      "files": [
+        "client/src/components/CartDrawer.jsx",
+        "client/src/App.jsx"
+      ],
+      "usage": {
+        "tokens_in": 90000,
+        "tokens_out": 3000,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-008",
+      "title": "Script curl de verificación de EP-001 y EP-002 por CA",
+      "user_stories": [
+        "HU-01",
+        "HU-02",
+        "HU-03",
+        "HU-04",
+        "HU-05",
+        "HU-07"
+      ],
+      "estimation_hours": 3,
+      "story_points": 3,
+      "depends_on": [
+        "TASK-004"
+      ],
+      "status": "done",
+      "files": [
+        "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/artifacts/verify-api.sh"
+      ],
+      "usage": {
+        "tokens_in": 140000,
+        "tokens_out": 7000,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    },
+    {
+      "id": "TASK-009",
+      "title": "Recorrido de UI documentado para los CA de pantalla",
+      "user_stories": [
+        "HU-05",
+        "HU-06",
+        "HU-07"
+      ],
+      "estimation_hours": 1.5,
+      "story_points": 2,
+      "depends_on": [
+        "TASK-007"
+      ],
+      "status": "done",
+      "files": [
+        "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/artifacts/verify-ui.md"
+      ],
+      "usage": {
+        "tokens_in": 80000,
+        "tokens_out": 3500,
+        "approx": true,
+        "source": "declared-estimate",
+        "model_tier": "claude/opus"
+      }
+    }
+  ]
+}

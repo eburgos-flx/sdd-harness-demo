@@ -1,0 +1,271 @@
+{
+  "type": "object",
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": [
+        "nx",
+        "standalone"
+      ],
+      "default": "nx"
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "packageScope": {
+          "type": "string",
+          "pattern": "^@[a-z0-9-]+$"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "packageScope"
+      ],
+      "additionalProperties": false
+    },
+    "apps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "nestjs",
+              "react",
+              "python",
+              "nextjs",
+              "fastify",
+              "springboot",
+              "hono"
+            ]
+          },
+          "port": {
+            "type": "number",
+            "minimum": 1000,
+            "maximum": 65535
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "libs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "shared-types",
+              "shared-utils",
+              "ui-kit",
+              "api-client",
+              "config"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "default": []
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "postgres",
+              "redis",
+              "rabbitmq",
+              "minio"
+            ]
+          },
+          "version": {
+            "type": "string"
+          },
+          "port": {
+            "type": "number",
+            "minimum": 1000,
+            "maximum": 65535
+          },
+          "extensions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "default": []
+    },
+    "sdd": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "modules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cycles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "cycle": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "modules": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "weeks": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": [
+              "cycle",
+              "modules",
+              "weeks"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "skills": {
+          "type": "object",
+          "properties": {
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "sdd-*",
+                "generate-*",
+                "nx-*"
+              ]
+            },
+            "custom": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": []
+            }
+          },
+          "additionalProperties": false
+        },
+        "agents": {
+          "type": "object",
+          "properties": {
+            "instructionFile": {
+              "type": "string",
+              "default": "AGENTS.md"
+            },
+            "claudeFile": {
+              "type": "string",
+              "default": "CLAUDE.md"
+            },
+            "copilotInstructions": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "modules"
+      ],
+      "additionalProperties": false
+    },
+    "nx": {
+      "type": "object",
+      "properties": {
+        "plugins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "defaultProject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "plugins"
+      ],
+      "additionalProperties": false
+    },
+    "infra": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": [
+            "digitalocean",
+            "aws",
+            "gcp",
+            "vercel",
+            "railway"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "project",
+    "apps"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

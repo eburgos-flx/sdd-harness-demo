@@ -1,0 +1,113 @@
+{
+  "$schema": "./schemas/api.schema.json",
+  "_comment": "API contract registry. Grouped by app/lib. Updated by sdd-architect (status: defined) and sdd-implementor-back (status: implemented | updated). Source of truth for all endpoints.",
+  "api": {
+    "endpoints": [
+      {
+        "id": "EP-001",
+        "method": "GET",
+        "path": "/v1/members",
+        "module": "kudos-wall",
+        "spec": "sdd/specs/spec-eburgos-flx-001-kudos-wall",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Returns the full list of active team members sorted by full_name ascending (case-insensitive). Feeds the giver/receiver selectors of the webapp.",
+        "path_params": [],
+        "required_headers": [],
+        "request_body": {},
+        "responses": {
+          "200": "MemberDto[] — array of { id, full_name, handle }",
+          "500": "INTERNAL_ERROR envelope"
+        },
+        "changelog": []
+      },
+      {
+        "id": "EP-002",
+        "method": "GET",
+        "path": "/v1/categories",
+        "module": "kudos-wall",
+        "spec": "sdd/specs/spec-eburgos-flx-001-kudos-wall",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Returns the closed enum of categories with key (technical) and label (Spanish presentational). Backed by an in-memory constant; the frontend never hardcodes the list.",
+        "path_params": [],
+        "required_headers": [],
+        "request_body": {},
+        "responses": {
+          "200": "CategoryDto[] — array of { key, label } for the six fixed categories"
+        },
+        "changelog": []
+      },
+      {
+        "id": "EP-003",
+        "method": "POST",
+        "path": "/v1/kudos",
+        "module": "kudos-wall",
+        "spec": "sdd/specs/spec-eburgos-flx-001-kudos-wall",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Creates a kudo. Validates giver_id/receiver_id existence, giver != receiver, category in enum, message 1..280 code points after trim. Persists with server-assigned id and created_at (UTC). Rate-limited to 60 req/min per IP.",
+        "path_params": [],
+        "required_headers": ["Content-Type"],
+        "request_body": {
+          "giver_id": "uuid",
+          "receiver_id": "uuid",
+          "category": "teamwork | ownership | innovation | delivery | kindness | learning",
+          "message": "string (1..280 code points after trim)"
+        },
+        "responses": {
+          "201": "KudoDto — expanded card with giver, receiver, category { key, label }, message, created_at",
+          "422": "VALIDATION_ERROR | SELF_KUDO_FORBIDDEN | MEMBER_NOT_FOUND | INVALID_CATEGORY | MESSAGE_TOO_LONG",
+          "429": "RATE_LIMITED — exceeded 60 req/min per IP",
+          "500": "INTERNAL_ERROR envelope"
+        },
+        "changelog": []
+      },
+      {
+        "id": "EP-004",
+        "method": "GET",
+        "path": "/v1/kudos",
+        "module": "kudos-wall",
+        "spec": "sdd/specs/spec-eburgos-flx-001-kudos-wall",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Returns the paginated kudos feed ordered by (created_at DESC, id DESC). Cursor is opaque, HMAC-signed with CURSOR_SECRET. Default limit 20; values above 50 are silently capped.",
+        "path_params": [],
+        "required_headers": [],
+        "query_params": {
+          "limit": "Optional. Default 20. Values above 50 are silently capped.",
+          "cursor": "Optional. Opaque HMAC-signed cursor returned by the previous page. A corrupt cursor yields 400 INVALID_CURSOR."
+        },
+        "request_body": {},
+        "responses": {
+          "200": "KudoListResponse — { items: KudoDto[], next_cursor: string | null }",
+          "400": "INVALID_CURSOR — cursor corrupt or from another database",
+          "500": "INTERNAL_ERROR envelope"
+        },
+        "changelog": []
+      },
+      {
+        "id": "EP-005",
+        "method": "GET",
+        "path": "/healthz",
+        "module": "kudos-wall",
+        "spec": "sdd/specs/spec-eburgos-flx-001-kudos-wall",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Liveness probe. Returns 200 with { status: 'ok' } while the service is up. No external dependencies.",
+        "path_params": [],
+        "required_headers": [],
+        "request_body": {},
+        "responses": {
+          "200": "{ status: 'ok' }"
+        },
+        "changelog": []
+      }
+    ]
+  }
+}

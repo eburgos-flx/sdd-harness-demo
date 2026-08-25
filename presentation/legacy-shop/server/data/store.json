@@ -1,0 +1,148 @@
+{
+  "products": [
+    {
+      "id": "p-1001",
+      "sku": "AUD-NC90",
+      "name": "Auriculares NC-90",
+      "category": "Audio",
+      "description": "Over-ear con cancelacion activa y 30 h de bateria.",
+      "price": 189900,
+      "stock": 12,
+      "image": "https://picsum.photos/id/26/640/640",
+      "tags": [
+        "destacado"
+      ]
+    },
+    {
+      "id": "p-1002",
+      "sku": "TEC-K68",
+      "name": "Teclado mecanico K68",
+      "category": "Escritorio",
+      "description": "Switches lineales, layout 65% y cuerpo de aluminio.",
+      "price": 142500,
+      "stock": 8,
+      "image": "https://picsum.photos/id/60/640/640",
+      "tags": []
+    },
+    {
+      "id": "p-1003",
+      "sku": "MOU-V2",
+      "name": "Mouse inalambrico Vertex 2",
+      "category": "Escritorio",
+      "description": "Sensor de 26k DPI, 70 g y carga por USB-C.",
+      "price": 78400,
+      "stock": 23,
+      "image": "https://picsum.photos/id/201/640/640",
+      "tags": []
+    },
+    {
+      "id": "p-1004",
+      "sku": "MON-U27",
+      "name": "Monitor Ultra 27\"",
+      "category": "Pantallas",
+      "description": "IPS 4K a 144 Hz con hub USB-C integrado.",
+      "price": 894000,
+      "stock": 4,
+      "image": "https://picsum.photos/id/668/640/640",
+      "tags": [
+        "destacado"
+      ]
+    },
+    {
+      "id": "p-1005",
+      "sku": "CAM-W4K",
+      "name": "Webcam Wide 4K",
+      "category": "Video",
+      "description": "Autofoco por fases, HDR y microfono dual.",
+      "price": 121000,
+      "stock": 15,
+      "image": "https://picsum.photos/id/250/640/640",
+      "tags": []
+    },
+    {
+      "id": "p-1006",
+      "sku": "LUZ-BAR",
+      "name": "Barra de luz Halo",
+      "category": "Escritorio",
+      "description": "Temperatura regulable, sin reflejos sobre la pantalla.",
+      "price": 63200,
+      "stock": 31,
+      "image": "https://picsum.photos/id/445/640/640",
+      "tags": []
+    },
+    {
+      "id": "p-1007",
+      "sku": "SIL-ERG",
+      "name": "Silla ergonomica Meridia",
+      "category": "Muebles",
+      "description": "Malla transpirable, lumbar ajustable y apoyabrazos 4D.",
+      "price": 1120000,
+      "stock": 3,
+      "image": "https://picsum.photos/id/625/640/640",
+      "tags": [
+        "destacado"
+      ]
+    },
+    {
+      "id": "p-1008",
+      "sku": "DOC-TB4",
+      "name": "Dock Thunderbolt 4",
+      "category": "Conectividad",
+      "description": "Once puertos y 96 W de carga para el notebook.",
+      "price": 452000,
+      "stock": 7,
+      "image": "https://picsum.photos/id/36/640/640",
+      "tags": []
+    },
+    {
+      "id": "p-1009",
+      "sku": "MIC-STU",
+      "name": "Microfono Studio One",
+      "category": "Audio",
+      "description": "Condenser cardioide con brazo articulado incluido.",
+      "price": 236700,
+      "stock": 9,
+      "image": "https://picsum.photos/id/39/640/640",
+      "tags": []
+    },
+    {
+      "id": "p-1010",
+      "sku": "SSD-2TB",
+      "name": "SSD portatil 2 TB",
+      "category": "Almacenamiento",
+      "description": "Lectura de 2000 MB/s y carcasa resistente a golpes.",
+      "price": 298000,
+      "stock": 18,
+      "image": "https://picsum.photos/id/119/640/640",
+      "tags": []
+    },
+    {
+      "id": "p-1011",
+      "sku": "SOP-NOT",
+      "name": "Soporte de notebook Aero",
+      "category": "Escritorio",
+      "description": "Aluminio plegable con seis alturas.",
+      "price": 54900,
+      "stock": 27,
+      "image": "https://picsum.photos/id/48/640/640",
+      "tags": []
+    },
+    {
+      "id": "p-1012",
+      "sku": "TAB-PEN",
+      "name": "Tableta grafica Pen 12",
+      "category": "Video",
+      "description": "8192 niveles de presion y ocho teclas configurables.",
+      "price": 176300,
+      "stock": 6,
+      "image": "https://picsum.photos/id/7/640/640",
+      "tags": []
+    }
+  ],
+  "settings": {
+    "storeName": "Legacy Shop",
+    "currency": "ARS",
+    "shippingFlat": 4500,
+    "freeShippingOver": 250000
+  }
+}

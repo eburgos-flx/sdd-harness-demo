@@ -1,0 +1,63 @@
+{
+  "$schema": "../schemas/specs-index.schema.json",
+  "_comment": "Central SDD spec registry. Append-only — never edit existing entries, only add new ones. Updated when a spec branch is merged to master.",
+  "_convention": "Folder/ID format: spec-[gh-user]-[NNN]-[slug] where NNN is the author's own counter (not global). Each developer maintains their own sequence.",
+  "specs": [
+    {
+      "id": "spec-eburgos-001-poll-create",
+      "author": "eburgos",
+      "slug": "poll-create",
+      "folder": "sdd/specs/spec-eburgos-001-poll-create",
+      "file": "sdd/specs/spec-eburgos-001-poll-create/spec-eburgos-001-poll-create.spec.md",
+      "module": "poll-create",
+      "app": "apps/quick-polls",
+      "status": "completed",
+      "title": "Crear encuesta con 2-5 opciones",
+      "created_at": "2026-08-24",
+      "completed_at": "2026-08-24",
+      "depends_on": []
+    },
+    {
+      "id": "spec-eburgos-002-poll-vote",
+      "author": "eburgos",
+      "slug": "poll-vote",
+      "folder": "sdd/specs/spec-eburgos-002-poll-vote",
+      "file": "sdd/specs/spec-eburgos-002-poll-vote/spec-eburgos-002-poll-vote.spec.md",
+      "module": "poll-vote",
+      "app": "apps/quick-polls",
+      "status": "completed",
+      "title": "Votar una vez por navegador",
+      "created_at": "2026-08-24",
+      "completed_at": "2026-08-24",
+      "depends_on": ["spec-eburgos-001-poll-create"]
+    },
+    {
+      "id": "spec-eburgos-003-poll-close",
+      "author": "eburgos",
+      "slug": "poll-close",
+      "folder": "sdd/specs/spec-eburgos-003-poll-close",
+      "file": "sdd/specs/spec-eburgos-003-poll-close/spec-eburgos-003-poll-close.spec.md",
+      "module": "poll-close",
+      "app": "apps/quick-polls",
+      "status": "completed",
+      "title": "Cerrar la encuesta",
+      "created_at": "2026-08-24",
+      "completed_at": "2026-08-24",
+      "depends_on": ["spec-eburgos-001-poll-create"]
+    },
+    {
+      "id": "spec-eburgos-004-poll-results",
+      "author": "eburgos",
+      "slug": "poll-results",
+      "folder": "sdd/specs/spec-eburgos-004-poll-results",
+      "file": "sdd/specs/spec-eburgos-004-poll-results/spec-eburgos-004-poll-results.spec.md",
+      "module": "poll-results",
+      "app": "apps/quick-polls",
+      "status": "completed",
+      "title": "Vista de resultados con gráfico de barras",
+      "created_at": "2026-08-24",
+      "completed_at": "2026-08-24",
+      "depends_on": ["spec-eburgos-001-poll-create", "spec-eburgos-002-poll-vote", "spec-eburgos-003-poll-close"]
+    }
+  ]
+}

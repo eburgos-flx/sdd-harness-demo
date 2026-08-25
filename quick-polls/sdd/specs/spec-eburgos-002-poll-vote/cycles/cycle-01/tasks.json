@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../schemas/cycle-tasks.schema.json",
+  "spec": "spec-eburgos-002-poll-vote",
+  "cycle": 1,
+  "module": "poll-vote",
+  "apps": ["apps/quick-polls"],
+  "flow": "reduced",
+  "user_stories_generated": false,
+  "prerequisites": { "tasks_generated": true },
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "POST /api/polls/[id]/vote — cookie-based idempotency + Zod optionIndex",
+      "user_stories": [],
+      "estimation_hours": 1,
+      "story_points": 3,
+      "depends_on": [],
+      "status": "done",
+      "files": ["app/api/polls/[id]/vote/route.ts"]
+    },
+    {
+      "id": "TASK-002",
+      "title": "Public voting page /p/[id] with SSR-checked cookie + closed/already-voted branches",
+      "user_stories": [],
+      "estimation_hours": 1,
+      "story_points": 3,
+      "depends_on": ["TASK-001"],
+      "status": "done",
+      "files": ["app/p/[id]/page.tsx", "app/p/[id]/vote-form.tsx"]
+    }
+  ]
+}

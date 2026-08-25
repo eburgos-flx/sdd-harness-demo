@@ -10,6 +10,7 @@ export default function CartDrawer(props) {
     order,
     errors,
     generalError,
+    couponError,
     submitting,
     onClose,
     onQty,
@@ -55,8 +56,10 @@ export default function CartDrawer(props) {
 
         {view === 'checkout' ? (
           <CheckoutForm
+            cartId={cart.cartId}
             totals={totals}
             errors={errors}
+            couponError={couponError}
             submitting={submitting}
             onBack={onBackToCart}
             onSubmit={onSubmit}

@@ -1,0 +1,50 @@
+{
+  "$schema": "./schemas/global.schema.json",
+  "project": "quick-polls",
+  "description": "Standalone Next.js app for quick browser-scoped polls with JSON-file persistence.",
+  "version": "0.1.0",
+  "completed_modules": [
+    {
+      "module": "poll-create",
+      "spec": "spec-eburgos-001-poll-create",
+      "apps": ["apps/quick-polls"],
+      "cycles_completed": 1,
+      "completed_at": "2026-08-24",
+      "description": "Endpoint POST /api/polls + GET /api/polls/:id, JSON-file store with atomic rename lock, home form with 2-5 option inputs."
+    },
+    {
+      "module": "poll-vote",
+      "spec": "spec-eburgos-002-poll-vote",
+      "apps": ["apps/quick-polls"],
+      "cycles_completed": 1,
+      "completed_at": "2026-08-24",
+      "description": "POST /api/polls/:id/vote with httpOnly cookie idempotency + SSR /p/:id page with vote form / closed / already-voted branches."
+    },
+    {
+      "module": "poll-close",
+      "spec": "spec-eburgos-003-poll-close",
+      "apps": ["apps/quick-polls"],
+      "cycles_completed": 1,
+      "completed_at": "2026-08-24",
+      "description": "POST /api/polls/:id/close with timingSafeEqual token check + /p/:id/manage page (token-gated) with close button."
+    },
+    {
+      "module": "poll-results",
+      "spec": "spec-eburgos-004-poll-results",
+      "apps": ["apps/quick-polls"],
+      "cycles_completed": 1,
+      "completed_at": "2026-08-24",
+      "description": "/p/:id/results server-rendered with recharts BarChart (dynamic ssr:false) + 3s polling while status=open."
+    }
+  ],
+  "in_progress_modules": [],
+  "pending_modules": [],
+  "monorepo": {
+    "tool": "none (standalone repo)",
+    "package_manager": "pnpm",
+    "apps": {
+      "quick-polls": ". — nextjs (standalone: código en la raíz del repo)"
+    },
+    "libs": {}
+  }
+}

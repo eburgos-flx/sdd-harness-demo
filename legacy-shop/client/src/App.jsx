@@ -28,6 +28,7 @@ export default function App() {
   const [order, setOrder] = useState(null);
   const [errors, setErrors] = useState({});
   const [generalError, setGeneralError] = useState('');
+  const [couponError, setCouponError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [justAddedId, setJustAddedId] = useState(null);
 
@@ -120,19 +121,24 @@ export default function App() {
     }
   }
 
-  async function handleCheckout(customer) {
+  async function handleCheckout(customer, couponCode) {
     setSubmitting(true);
     setErrors({});
     setGeneralError('');
+    setCouponError('');
 
     try {
-      const data = await api.checkout(cart.cartId, customer);
+      const data = await api.checkout(cart.cartId, customer, couponCode);
       persist(data.cart);
       setOrder(data.order);
       setView('done');
     } catch (err) {
+      const failure = err.payload || {};
+
       if (err.status === 422) {
-        setErrors(err.payload.errors || {});
+        setErrors(failure.errors || {});
+      } else if (String(failure.error || '').startsWith('coupon_')) {
+        setCouponError(err.message);
       } else {
         setGeneralError(err.message);
       }
@@ -196,6 +202,7 @@ export default function App() {
         order={order}
         errors={errors}
         generalError={drawerOpen ? generalError : ''}
+        couponError={couponError}
         submitting={submitting}
         onClose={() => setDrawerOpen(false)}
         onQty={handleQty}

@@ -1,18 +1,61 @@
 import { useState } from 'react';
 import { formatPrice } from '../format.js';
+import { validateCoupon } from '../api.js';
 
 const EMPTY = { name: '', email: '', address: '', city: '', notes: '' };
 
-export default function CheckoutForm({ totals, errors, submitting, onBack, onSubmit }) {
+export default function CheckoutForm({
+  cartId,
+  totals,
+  errors,
+  couponError,
+  submitting,
+  onBack,
+  onSubmit,
+}) {
   const [customer, setCustomer] = useState(EMPTY);
+  const [couponCode, setCouponCode] = useState('');
+  const [applied, setApplied] = useState(null);
+  const [couponMessage, setCouponMessage] = useState('');
+  const [checkingCoupon, setCheckingCoupon] = useState(false);
+
+  const shownTotals = applied ? applied.totals : totals;
+  const shownCouponError = couponMessage || couponError;
 
   function set(field, value) {
     setCustomer((prev) => ({ ...prev, [field]: value }));
   }
 
+  async function applyCoupon() {
+    const code = couponCode.trim();
+
+    if (code === '') {
+      setCouponMessage('Ingresa un codigo de cupon');
+      return;
+    }
+
+    setCheckingCoupon(true);
+    setCouponMessage('');
+
+    try {
+      setApplied(await validateCoupon(cartId, code));
+    } catch (err) {
+      setApplied(null);
+      setCouponMessage(err.message);
+    } finally {
+      setCheckingCoupon(false);
+    }
+  }
+
+  function removeCoupon() {
+    setApplied(null);
+    setCouponCode('');
+    setCouponMessage('');
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
-    onSubmit(customer);
+    onSubmit(customer, applied ? applied.coupon.code : '');
   }
 
   return (
@@ -76,18 +119,54 @@ export default function CheckoutForm({ totals, errors, submitting, onBack, onSub
         />
       </div>
 
+      <div className="field">
+        <label htmlFor="co-coupon">Cupon de descuento</label>
+
+        {applied ? (
+          <div className="coupon__applied">
+            <span>
+              <strong>{applied.coupon.code}</strong> &mdash; {applied.coupon.percentOff}% de descuento
+            </span>
+            <button type="button" className="link-back" onClick={removeCoupon}>
+              Quitar
+            </button>
+          </div>
+        ) : (
+          <div className="coupon__row">
+            <input
+              id="co-coupon"
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+              autoComplete="off"
+              placeholder="Ingresa tu codigo"
+            />
+            <button type="button" className="btn" onClick={applyCoupon} disabled={checkingCoupon}>
+              {checkingCoupon ? 'Validando...' : 'Aplicar'}
+            </button>
+          </div>
+        )}
+
+        {shownCouponError ? <small className="field__error">{shownCouponError}</small> : null}
+      </div>
+
       <div className="totals">
         <div className="totals__row">
           <span>Subtotal</span>
-          <span>{formatPrice(totals.subtotal)}</span>
+          <span>{formatPrice(shownTotals.subtotal)}</span>
         </div>
+        {applied ? (
+          <div className="totals__row totals__row--discount">
+            <span>Descuento ({applied.coupon.code})</span>
+            <span>&minus;{formatPrice(shownTotals.discount)}</span>
+          </div>
+        ) : null}
         <div className="totals__row">
           <span>Envio</span>
-          <span>{totals.shipping === 0 ? 'Gratis' : formatPrice(totals.shipping)}</span>
+          <span>{shownTotals.shipping === 0 ? 'Gratis' : formatPrice(shownTotals.shipping)}</span>
         </div>
         <div className="totals__row totals__row--big">
           <span>Total</span>
-          <span>{formatPrice(totals.total)}</span>
+          <span>{formatPrice(shownTotals.total)}</span>
         </div>
       </div>
 

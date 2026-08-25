@@ -1,0 +1,29 @@
+{
+  "$schema": "./schemas/global.schema.json",
+  "project": "flexi-kudos",
+  "description": "Muro de reconocimientos de equipo",
+  "version": "0.1.0",
+  "completed_modules": [
+    {
+      "module": "kudos-wall",
+      "spec": "spec-eburgos-flx-001-kudos-wall",
+      "apps": ["apps/api", "apps/webapp", "libs/shared-types"],
+      "cycles_completed": 1,
+      "completed_at": "2026-08-24",
+      "description": "Muro de reconocimientos punta a punta: API NestJS/Prisma/Postgres para POST y GET kudos con paginación por cursor y rate limit, DTOs compartidos y webapp React con muro y formulario de alta"
+    }
+  ],
+  "in_progress_modules": [],
+  "pending_modules": [],
+  "monorepo": {
+    "tool": "Nx",
+    "package_manager": "pnpm",
+    "apps": {
+      "api": "apps/api — nestjs",
+      "webapp": "apps/webapp — react"
+    },
+    "libs": {
+      "shared-types": "libs/shared-types — shared-types"
+    }
+  }
+}

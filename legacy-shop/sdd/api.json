@@ -1,0 +1,103 @@
+{
+  "$schema": "./schemas/api.schema.json",
+  "_comment": "API contract registry. Grouped by app/lib. Updated by sdd-architect (status: defined) and sdd-implementor-back (status: implemented | updated). Source of truth for all endpoints.",
+  "_schema": {
+    "_structure": "{ [app-key]: { endpoints: EndpointEntry[] } }",
+    "_app_keys": "Use the app directory name as key. E.g. 'example-api', 'apps/example-app', 'libs/shared-lib'",
+    "_update_protocol": {
+      "create": "Set created_in_cycle: N, updated_in_cycle: null, changelog: []. Status: defined (architect) → implemented (implementor-back).",
+      "update": "Set updated_in_cycle: N, append to changelog: { cycle: N, date: YYYY-MM-DD, change: 'what changed' }. Status → updated.",
+      "deprecate": "Set status: deprecated, append to changelog with change: 'deprecated — reason'"
+    },
+    "EndpointEntry": {
+      "id": "EP-[NNN] — correlativo global por app",
+      "method": "GET | POST | PUT | PATCH | DELETE",
+      "path": "URL path del endpoint",
+      "module": "módulo SDD al que pertenece",
+      "spec": "path a la spec que lo originó",
+      "status": "defined | implemented | updated | deprecated",
+      "created_in_cycle": "número de ciclo donde se definió por primera vez",
+      "updated_in_cycle": "número del último ciclo que lo modificó (null si nunca se actualizó)",
+      "description": "qué hace el endpoint",
+      "path_params": [
+        "param1"
+      ],
+      "required_headers": [
+        "Header-Name"
+      ],
+      "request_body": {},
+      "responses": {
+        "200": "descripción"
+      },
+      "changelog": [
+        {
+          "cycle": 2,
+          "date": "YYYY-MM-DD",
+          "change": "descripción del cambio"
+        }
+      ]
+    }
+  },
+  "legacy-shop": {
+    "endpoints": [
+      {
+        "id": "EP-001",
+        "method": "POST",
+        "path": "/coupons/validate",
+        "module": "checkout-coupon",
+        "spec": "sdd/specs/spec-eburgos-flx-001-checkout-coupon",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Previsualiza el descuento de un cupon sobre el carrito indicado. No muta el carrito ni crea orden. Responde solo sobre el codigo consultado: no existe forma de enumerar el catalogo de cupones.",
+        "path_params": [],
+        "required_headers": [
+          "content-type"
+        ],
+        "request_body": {
+          "cartId": "string — id del carrito activo",
+          "couponCode": "string — codigo tal como lo tipeo la persona; se normaliza sin mayusculas ni espacios de borde"
+        },
+        "responses": {
+          "200": "{ coupon: { code, percentOff }, totals: { subtotal, discount, shipping, total, freeShippingOver } } — shipping calculado sobre el subtotal previo al descuento",
+          "400": "bad_request (falta cartId o couponCode vacio) | empty_cart (carrito inexistente o sin lineas)",
+          "409": "coupon_not_found | coupon_inactive | coupon_expired | coupon_min_subtotal (este ultimo incluye minSubtotal en el payload)"
+        },
+        "changelog": []
+      },
+      {
+        "id": "EP-002",
+        "method": "POST",
+        "path": "/checkout",
+        "module": "checkout-coupon",
+        "spec": "sdd/specs/spec-eburgos-flx-001-checkout-coupon",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Confirma la compra: valida datos, revalida cada linea contra el catalogo, recalcula totales y arma la orden. Preexistia a SDD y se registra en este ciclo, que le agrega el cupon opcional. El servidor recalcula todo: el cliente transmite el codigo, nunca el importe del descuento.",
+        "path_params": [],
+        "required_headers": [
+          "content-type"
+        ],
+        "request_body": {
+          "cartId": "string — id del carrito activo",
+          "customer": "{ name, email, address, city, notes? } — notes es opcional",
+          "couponCode": "string opcional — sin el campo, el comportamiento es identico al previo a este ciclo"
+        },
+        "responses": {
+          "201": "{ order: { id, createdAt, status, customer, items, totals: { subtotal, discount, shipping, total }, coupon: { code, percentOff, amount } | null }, cart } — discount 0 y coupon null cuando no se envio cupon",
+          "400": "bad_request (falta cartId) | empty_cart (carrito vacio)",
+          "409": "product_gone | no_stock | coupon_not_found | coupon_inactive | coupon_expired | coupon_min_subtotal — el cupon se evalua despues de la revalidacion de stock, sin crear orden ni vaciar el carrito",
+          "422": "validation_error con errors por campo del customer — prevalece sobre el cupon"
+        },
+        "changelog": [
+          {
+            "cycle": 1,
+            "date": "2026-08-24",
+            "change": "Registrado en SDD y ampliado con couponCode opcional, totals.discount y order.coupon"
+          }
+        ]
+      }
+    ]
+  }
+}

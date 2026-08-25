@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../../schemas/cycle-tasks.schema.json",
+  "spec": "spec-eburgos-003-poll-close",
+  "cycle": 1,
+  "module": "poll-close",
+  "apps": ["apps/quick-polls"],
+  "flow": "reduced",
+  "user_stories_generated": false,
+  "prerequisites": { "tasks_generated": true },
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "POST /api/polls/[id]/close — timingSafeEqual token check + idempotent close",
+      "user_stories": [],
+      "estimation_hours": 0.75,
+      "story_points": 2,
+      "depends_on": [],
+      "status": "done",
+      "files": ["app/api/polls/[id]/close/route.ts"]
+    },
+    {
+      "id": "TASK-002",
+      "title": "/p/[id]/manage page with token gate (404 if invalid) + close button",
+      "user_stories": [],
+      "estimation_hours": 1,
+      "story_points": 3,
+      "depends_on": ["TASK-001"],
+      "status": "done",
+      "files": ["app/p/[id]/manage/page.tsx", "app/p/[id]/manage/close-button.tsx"]
+    }
+  ]
+}

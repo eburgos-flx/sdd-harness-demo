@@ -1,0 +1,107 @@
+{
+  "$schema": "./schemas/components.schema.json",
+  "_comment": "Frontend component registry. Grouped by app. Updated by sdd-architect (status: defined) and sdd-implementor-front (status: implemented | updated). Source of truth for all React components.",
+  "_schema": {
+    "_structure": "{ [app-key]: { components: ComponentEntry[] } }",
+    "_app_keys": "Use the app directory name as key. E.g. 'apps/example-app'. API apps don't have React components.",
+    "_update_protocol": {
+      "create": "Set created_in_cycle: N, updated_in_cycle: null, changelog: []. Status: defined (architect) → implemented (implementor-front).",
+      "update": "Set updated_in_cycle: N, append to changelog: { cycle: N, date: YYYY-MM-DD, change: 'what changed' }. Status → updated.",
+      "deprecate": "Set status: deprecated, append to changelog with change: 'deprecated — reason'. Do NOT delete."
+    },
+    "ComponentEntry": {
+      "id": "COMP-[NNN] — correlativo global por app",
+      "name": "Nombre del componente React (PascalCase)",
+      "type": "page | component | hook | layout",
+      "module": "módulo SDD al que pertenece",
+      "spec": "path a la spec que lo originó",
+      "path": "ruta relativa dentro del app (src/pages/...)",
+      "status": "defined | implemented | updated | deprecated",
+      "created_in_cycle": "número de ciclo donde se definió por primera vez",
+      "updated_in_cycle": "número del último ciclo que lo modificó (null si nunca se actualizó)",
+      "description": "qué hace el componente",
+      "consumes": [
+        "EP-001"
+      ],
+      "created_at": "YYYY-MM-DD",
+      "changelog": [
+        {
+          "cycle": 2,
+          "date": "YYYY-MM-DD",
+          "change": "descripción del cambio"
+        }
+      ]
+    }
+  },
+  "legacy-shop": {
+    "components": [
+      {
+        "id": "COMP-001",
+        "name": "CheckoutForm",
+        "type": "component",
+        "module": "checkout-coupon",
+        "spec": "sdd/specs/spec-eburgos-flx-001-checkout-coupon",
+        "path": "client/src/components/CheckoutForm.jsx",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Formulario de checkout. Preexistia a SDD y se registra en este ciclo, que le agrega el campo de cupon (aplicar/quitar), el estado de validacion y la linea de descuento en el bloque de totales. Es el dueno del estado del cupon.",
+        "consumes": [
+          "EP-001"
+        ],
+        "created_at": "2026-08-24",
+        "changelog": [
+          {
+            "cycle": 1,
+            "date": "2026-08-24",
+            "change": "Registrado en SDD y ampliado con el campo de cupon y la linea de descuento"
+          }
+        ]
+      },
+      {
+        "id": "COMP-002",
+        "name": "CartDrawer",
+        "type": "component",
+        "module": "checkout-coupon",
+        "spec": "sdd/specs/spec-eburgos-flx-001-checkout-coupon",
+        "path": "client/src/components/CartDrawer.jsx",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Panel lateral del carrito y contenedor del paso de checkout. Este ciclo solo le agrega el pasaje de cartId y couponError a CheckoutForm: sus propios totales no muestran el cupon.",
+        "consumes": [],
+        "created_at": "2026-08-24",
+        "changelog": [
+          {
+            "cycle": 1,
+            "date": "2026-08-24",
+            "change": "Registrado en SDD y ampliado con el pasaje de cartId y couponError"
+          }
+        ]
+      },
+      {
+        "id": "COMP-003",
+        "name": "App",
+        "type": "page",
+        "module": "checkout-coupon",
+        "spec": "sdd/specs/spec-eburgos-flx-001-checkout-coupon",
+        "path": "client/src/App.jsx",
+        "status": "implemented",
+        "created_in_cycle": 1,
+        "updated_in_cycle": null,
+        "description": "Raiz de la SPA. Este ciclo le agrega el estado couponError y la propagacion del codigo de cupon al confirmar, separando el rechazo de cupon de los errores de formulario y de los errores generales.",
+        "consumes": [
+          "EP-002"
+        ],
+        "created_at": "2026-08-24",
+        "changelog": [
+          {
+            "cycle": 1,
+            "date": "2026-08-24",
+            "change": "Registrado en SDD y ampliado con couponError y couponCode en el checkout"
+          }
+        ]
+      }
+    ]
+  }
+}

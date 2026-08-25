@@ -3,8 +3,9 @@ import cors from '@fastify/cors';
 
 import productRoutes from './routes/products.js';
 import { registerCartRoutes, cartPayload } from './routes/cart.js';
+import couponRoutes from './routes/coupons.js';
 import { getCart, clearCart, findProduct, pushOrder, listOrders, getSettings } from './store.js';
-import { isEmail, shortId } from './utils.js';
+import { isEmail, shortId, resolveCoupon, calcDiscountedTotal } from './utils.js';
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
 const HOST = process.env.HOST || '0.0.0.0';
@@ -34,6 +35,7 @@ app.get('/settings', async () => {
 
 await app.register(productRoutes);
 await app.register(registerCartRoutes);
+await app.register(couponRoutes);
 
 /*
  * CHECKOUT
@@ -121,7 +123,25 @@ app.post('/checkout', async (request, reply) => {
     shipping = 0;
   }
 
-  const total = subtotal + shipping;
+  let discount = 0;
+  let appliedCoupon = null;
+
+  if (String(body.couponCode || '').trim() !== '') {
+    const resolved = resolveCoupon(body.couponCode, subtotal);
+
+    if (resolved.error) {
+      return reply.code(409).send(resolved);
+    }
+
+    discount = resolved.discount;
+    appliedCoupon = {
+      code: resolved.coupon.code,
+      percentOff: resolved.coupon.percentOff,
+      amount: resolved.discount,
+    };
+  }
+
+  const total = calcDiscountedTotal(subtotal, discount, shipping);
 
   const order = {
     id: shortId('ord'),
@@ -137,9 +157,11 @@ app.post('/checkout', async (request, reply) => {
     items: lines,
     totals: {
       subtotal: subtotal,
+      discount: discount,
       shipping: shipping,
       total: total,
     },
+    coupon: appliedCoupon,
   };
 
   pushOrder(order);

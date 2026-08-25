@@ -36,6 +36,12 @@ export function findProduct(id) {
   return readStore().products.find((p) => p.id === id) || null;
 }
 
+export function findCoupon(code) {
+  const normalized = String(code || '').trim().toUpperCase();
+  if (!normalized) return null;
+  return readStore().coupons.find((c) => c.code.toUpperCase() === normalized) || null;
+}
+
 export function getCart(cartId) {
   if (!cartId) return null;
   return carts.get(cartId) || null;

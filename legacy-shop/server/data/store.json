@@ -144,5 +144,42 @@
     "currency": "ARS",
     "shippingFlat": 4500,
     "freeShippingOver": 250000
-  }
+  },
+  "coupons": [
+    {
+      "code": "PRIMAVERA15",
+      "percentOff": 15,
+      "active": true,
+      "expiresAt": "2026-12-31",
+      "minSubtotal": 0
+    },
+    {
+      "code": "BIENVENIDA10",
+      "percentOff": 10,
+      "active": true,
+      "expiresAt": "2026-12-31",
+      "minSubtotal": 150000
+    },
+    {
+      "code": "VERANO20",
+      "percentOff": 20,
+      "active": false,
+      "expiresAt": "2026-12-31",
+      "minSubtotal": 0
+    },
+    {
+      "code": "INVIERNO25",
+      "percentOff": 25,
+      "active": true,
+      "expiresAt": "2026-06-30",
+      "minSubtotal": 0
+    },
+    {
+      "code": "PRUEBA100",
+      "percentOff": 100,
+      "active": true,
+      "expiresAt": "2026-12-31",
+      "minSubtotal": 0
+    }
+  ]
 }

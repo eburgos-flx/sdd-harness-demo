@@ -1,0 +1,120 @@
+{
+  "$schema": "../../../../schemas/cycle.schema.json",
+  "cycle": 1,
+  "module": "checkout-coupon",
+  "spec": "spec-eburgos-flx-001-checkout-coupon",
+  "apps": ["apps/legacy-shop"],
+  "phase": "checkout-discount",
+  "flow": "full",
+  "objectives": [
+    "Catálogo de cupones como dato del store, leído por accessors de store.js",
+    "Validación previa del cupón sin mutar el carrito",
+    "Descuento revalidado y aplicado en POST /checkout",
+    "La orden registra cupón, porcentaje y monto descontado",
+    "Campo de cupón en el checkout del front con aplicar, quitar y error"
+  ],
+  "status": "in-progress",
+  "started_at": "2026-08-24",
+  "completed_at": null,
+  "documents": {
+    "brief": "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/brief.yaml",
+    "functional": "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/functional.md",
+    "planner": "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/planner.md",
+    "architect": "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/architect.md",
+    "tasks": "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/tasks.json"
+  },
+  "artifacts": [
+    "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/artifacts/verify-api.sh",
+    "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/artifacts/verify-ui.md"
+  ],
+  "metrics": {
+    "tasks_total": 9,
+    "tasks_completed": 9,
+    "tasks_skipped": 0,
+    "story_points": 20,
+    "files_created": [
+      "server/src/routes/coupons.js",
+      "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/artifacts/verify-api.sh",
+      "sdd/specs/spec-eburgos-flx-001-checkout-coupon/cycles/cycle-01/artifacts/verify-ui.md"
+    ],
+    "files_modified": [
+      "server/data/store.json",
+      "server/src/store.js",
+      "server/src/utils.js",
+      "server/src/index.js",
+      "client/src/api.js",
+      "client/src/components/CheckoutForm.jsx",
+      "client/src/components/CartDrawer.jsx",
+      "client/src/App.jsx",
+      "client/src/styles.css"
+    ],
+    "files_deleted": [],
+    "usage": {
+      "tokens_in": 1900000,
+      "tokens_out": 75000,
+      "duration_minutes": 80,
+      "approx": true,
+      "source": "declared-estimate",
+      "by_tier": {
+        "claude/opus": {
+          "tokens_in": 1900000,
+          "tokens_out": 75000,
+          "approx": true,
+          "source": "declared-estimate"
+        }
+      }
+    }
+  },
+  "tables_created": [],
+  "endpoints_implemented": ["EP-001", "EP-002"],
+  "components_created": ["COMP-001", "COMP-002", "COMP-003"],
+  "issues_found": [
+    "CA-001 y CA-002 fijan un subtotal de $100.000 que ninguna combinación del catálogo real puede armar; verificados con la misma relación sobre $142.500 (ver planner.md, Pendiente de documentar en contexto)",
+    "CA-008, CA-018, CA-019 y CA-020 solo se verifican en pantalla y quedaron SIN EJECUTAR: el entorno de implementación no tenía navegador manejable",
+    "Deuda preexistente no tocada: POST /checkout duplica calcTotals() y hardcodea 4500/250000; el cupón se apoya encima. Candidata a fix propio",
+    "El CONTEXTO GATE choca con el check de portabilidad del kit en repos standalone: la tabla global no puede nombrar al subproyecto porque su nombre es el project de global.json. Resuelto apuntando a global.json"
+  ],
+  "reviewer_report": {
+    "approved": false,
+    "date": "2026-08-24",
+    "ca_results": {
+      "CA-001": "PASS — verify-api.sh: PRIMAVERA15 sobre subtotal $142.500 devuelve descuento $21.375, envío $4.500, total $125.625; el carrito no cambia. El subtotal del enunciado ($100.000) no es reproducible con el catálogo real",
+      "CA-002": "PASS — verify-api.sh: /checkout 201 con totals {subtotal 142500, discount 21375, shipping 4500, total 125625} y coupon {PRIMAVERA15, 15, 21375}",
+      "CA-003": "PASS — verify-api.sh: '  primavera15  ' devuelve una respuesta byte a byte idéntica a 'PRIMAVERA15'",
+      "CA-004": "PASS — verify-api.sh: coupon_not_found, coupon_inactive, coupon_expired y coupon_min_subtotal, los cuatro 409 con código propio y ninguno confirma compra",
+      "CA-005": "PASS — verify-api.sh: sin couponCode, subtotal/shipping/total idénticos al comportamiento previo; discount 0 y coupon null son campos aditivos (AD-09)",
+      "CA-006": "PASS — verify-api.sh: subtotal $291.600 con envío $0; con 15% el subtotal descontado cae a $247.860 y el envío sigue en $0",
+      "CA-007": "PASS — verify-api.sh: cupón vencido al confirmar devuelve 409, el carrito conserva su subtotal y el conteo de /orders no aumenta",
+      "CA-008": "PENDING — solo verificable en pantalla; guion listo en artifacts/verify-ui.md pasos 2-8, sin ejecutar",
+      "CA-009": "PASS — verify-api.sh: GET /settings devuelve exactamente storeName, currency, shippingFlat, freeShippingOver; GET /coupons responde 404",
+      "CA-010": "PASS — git diff: routes/cart.js con 0 líneas de cambio, calcTotals() sin tocar, package.json sin cambios, pnpm build en verde y ambos servers levantan sin errores nuevos",
+      "CA-011": "PASS — pnpm sdd:validate en verde; fragmento aditivo en context/apps/<app>/updates/ y entrada de journal escritos",
+      "CA-012": "PASS — verify-api.sh: subtotal, discount, shipping y total son todos enteros",
+      "CA-013": "PASS — verify-api.sh: dos llamadas consecutivas devuelven la misma respuesta y el carrito queda igual",
+      "CA-014": "PASS — verify-api.sh: '   ' devuelve 400 bad_request sin consultar el catálogo",
+      "CA-015": "PASS — verify-api.sh: el rechazo por mínimo trae minSubtotal 150000 y el mensaje cita $ 150.000",
+      "CA-016": "PASS — verify-api.sh: el mensaje de rechazo no menciona ningún otro código del catálogo",
+      "CA-017": "PASS — verify-api.sh: PRUEBA100 sobre subtotal $63.200 deja total $4.500, el importe del envío",
+      "CA-018": "PENDING — solo verificable en pantalla; guion listo en artifacts/verify-ui.md paso 11, sin ejecutar",
+      "CA-019": "PENDING — solo verificable en pantalla; guion listo en artifacts/verify-ui.md paso 10, sin ejecutar",
+      "CA-020": "PENDING — solo verificable en pantalla; guion listo en artifacts/verify-ui.md paso 9, sin ejecutar",
+      "CA-021": "PASS — verify-api.sh: GET /cart no devuelve discount y sus totales no cambian; el paso visual queda en verify-ui.md paso 1",
+      "CA-022": "PASS — verify-api.sh: tras el rechazo del cupón, reintentar sin cupón confirma por $147.000"
+    },
+    "tests": {
+      "sdd:validate": "OK — 10 files valid, cross-checks passed",
+      "verify-api.sh": "23/23 PASS, exit 0",
+      "verify-ui.md": "SIN EJECUTAR — requiere navegador y una persona; 4 CA dependen de esto",
+      "pnpm build": "OK — 36 módulos, sin warnings nuevos",
+      "suite": "N/A — el repo no tiene framework de tests y la spec (RNF-5) prohíbe introducirlo en este ciclo"
+    },
+    "notes": "Las 9 tasks quedaron done y el backend está verificado de punta a punta: 23/23 en verify-api.sh, incluidos los cuatro motivos de rechazo, la prevalencia de los errores de formulario y de stock sobre el cupón, y la no-regresión del checkout sin cupón. El diff respeta las seis restricciones del legacy: routes/cart.js intacto, calcTotals() sin cambio de firma, cero dependencias nuevas, cero comentarios narrativos agregados, /settings sin exponer cupones y la deuda del handler de /checkout sin tocar. NO se aprueba el cierre porque cuatro CA (CA-008, CA-018, CA-019, CA-020) solo se verifican en pantalla y no se ejecutaron: el entorno no tenía navegador manejable. No es un defecto detectado sino verificación faltante — el ciclo queda in-progress hasta que alguien corra artifacts/verify-ui.md y complete su columna de resultado. TELEMETRÍA: ninguna task traía usage al llegar al cierre porque implementación y revisión corrieron en la misma sesión de un solo agente; se registró por task y en total como estimación declarada (approx: true, source: declared-estimate) sobre claude/opus, que es el modelo que corrió todo el ciclo. No hay contador por sesión accesible a un agente: el reporte de uso de Claude Code lo tiene que pedir el dev. FIX-eburgos-flx-001 (lockfile sin ajv, que rompía sdd:validate y el gate de CI) se revisó y quedó validated; su lockfile no se contabiliza en los archivos del ciclo.",
+    "follow_ups": [
+      "Correr artifacts/verify-ui.md y completar su columna de resultado; con CA-008, CA-018, CA-019 y CA-020 en PASS, poner cycle.json en completed, mover el módulo a completed_modules y la spec a completed",
+      "Decidir si CA-001/CA-002 se reescriben con un monto reproducible o si se agrega al catálogo un producto de precio redondo",
+      "Fix propio para la deuda de POST /checkout: sacarlo de index.js, usar calcTotals() y leer shippingFlat/freeShippingOver de settings en vez de los valores hardcodeados",
+      "Reemplazar los cupones de prueba de server/data/store.json por los de campaña real antes de usar esto de verdad",
+      "Consolidar el fragmento de context/apps/<app>/updates/ en la constitution del subproyecto, que sigue siendo la plantilla vacía del kit"
+    ]
+  }
+}

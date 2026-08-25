@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../../schemas/cycle-tasks.schema.json",
+  "spec": "spec-eburgos-004-poll-results",
+  "cycle": 1,
+  "module": "poll-results",
+  "apps": ["apps/quick-polls"],
+  "flow": "reduced",
+  "user_stories_generated": false,
+  "prerequisites": { "tasks_generated": true },
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "SSR results page: fetch poll server-side + render ResultsView",
+      "user_stories": [],
+      "estimation_hours": 0.5,
+      "story_points": 2,
+      "depends_on": [],
+      "status": "done",
+      "files": ["app/p/[id]/results/page.tsx"]
+    },
+    {
+      "id": "TASK-002",
+      "title": "ResultsView client component: polling 3s (open only) + status chip + total + list",
+      "user_stories": [],
+      "estimation_hours": 1,
+      "story_points": 3,
+      "depends_on": ["TASK-001"],
+      "status": "done",
+      "files": ["app/p/[id]/results/results-view.tsx"]
+    },
+    {
+      "id": "TASK-003",
+      "title": "BarChart via dynamic import (ssr: false) — recharts BarChart + tooltip with % and count",
+      "user_stories": [],
+      "estimation_hours": 0.75,
+      "story_points": 2,
+      "depends_on": ["TASK-002"],
+      "status": "done",
+      "files": ["app/p/[id]/results/bar-chart.tsx"]
+    }
+  ]
+}

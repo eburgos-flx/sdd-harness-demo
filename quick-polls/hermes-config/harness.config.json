@@ -1,0 +1,23 @@
+{
+  "$schema": "./harness.config.schema.json",
+  "mode": "standalone",
+  "project": {
+    "name": "quick-polls",
+    "description": "Standalone Next.js app for quick browser-scoped polls with JSON-file persistence.",
+    "packageScope": "@quick-polls"
+  },
+  "apps": [
+    {
+      "name": "web",
+      "type": "nextjs",
+      "port": 3000,
+      "features": ["poll-create", "poll-vote", "poll-close", "poll-results"]
+    }
+  ],
+  "libs": [],
+  "services": [],
+  "sdd": {
+    "enabled": true,
+    "modules": ["poll-create", "poll-vote", "poll-close", "poll-results"]
+  }
+}
